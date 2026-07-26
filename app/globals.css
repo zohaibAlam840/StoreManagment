@@ -24,3 +24,27 @@ body {
   color: var(--foreground);
   font-family: Arial, Helvetica, sans-serif;
 }
+
+/* Thermal till-roll printing: hide everything except the invoice itself,
+   and size it for an 80mm roll (adjust to 58mm if your printer needs it). */
+@media print {
+  .no-print {
+    display: none !important;
+  }
+
+  aside {
+    display: none !important;
+  }
+
+  main {
+    padding: 0 !important;
+  }
+
+  #invoice-print {
+    width: 80mm;
+    max-width: 80mm;
+    margin: 0;
+    padding: 2mm;
+    color: #000;
+  }
+}
