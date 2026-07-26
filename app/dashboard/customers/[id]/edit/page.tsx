@@ -40,7 +40,7 @@ export default async function EditCustomerPage({
   return (
     <div className="flex flex-col gap-8">
       <div>
-        <div className="mb-4 flex items-center justify-between">
+        <div className="mb-4 flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
           <h1 className="text-lg font-semibold text-zinc-900 dark:text-zinc-50">
             Edit {customer.name}
           </h1>
@@ -68,6 +68,7 @@ export default async function EditCustomerPage({
           Set a special rate per product for this customer. It will be
           suggested automatically when invoicing them (Phase 2).
         </p>
+        <div className="overflow-x-auto">
         <table className="w-full max-w-2xl text-left text-sm">
           <thead>
             <tr className="border-b border-zinc-200 text-zinc-500 dark:border-zinc-800">
@@ -125,6 +126,7 @@ export default async function EditCustomerPage({
             )}
           </tbody>
         </table>
+        </div>
       </div>
     </div>
   );

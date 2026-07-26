@@ -11,7 +11,7 @@ export default async function InventoryReportPage() {
 
   return (
     <div>
-      <div className="mb-4 flex items-center justify-between">
+      <div className="mb-4 flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
         <h1 className="text-lg font-semibold text-zinc-900 dark:text-zinc-50">
           Stock Valuation
         </h1>
@@ -20,6 +20,7 @@ export default async function InventoryReportPage() {
         </Link>
       </div>
 
+      <div className="overflow-x-auto">
       <table className="w-full max-w-2xl text-left text-sm">
         <thead>
           <tr className="border-b border-zinc-200 text-zinc-500 dark:border-zinc-800">
@@ -43,6 +44,7 @@ export default async function InventoryReportPage() {
           )}
         </tbody>
       </table>
+      </div>
 
       <p className="mt-4 max-w-2xl text-right text-base font-semibold text-zinc-900 dark:text-zinc-50">
         Total stock value: {totalValue.toFixed(2)}

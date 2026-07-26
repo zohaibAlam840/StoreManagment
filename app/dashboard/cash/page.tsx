@@ -18,7 +18,7 @@ export default async function CashPage() {
 
   return (
     <div className="flex flex-col gap-8">
-      <div className="flex items-center justify-between">
+      <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
         <h1 className="text-lg font-semibold text-zinc-900 dark:text-zinc-50">
           Cash Management
         </h1>
@@ -38,7 +38,7 @@ export default async function CashPage() {
         </div>
       </div>
 
-      <div className="grid grid-cols-2 gap-6">
+      <div className="grid grid-cols-1 gap-6 lg:grid-cols-2">
         <div className="rounded-md border border-zinc-200 p-4 dark:border-zinc-800">
           <div className="mb-2 flex items-center justify-between">
             <h2 className="text-base font-semibold text-zinc-900 dark:text-zinc-50">Cash book (today)</h2>

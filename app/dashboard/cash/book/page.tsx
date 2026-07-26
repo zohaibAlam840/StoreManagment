@@ -55,6 +55,7 @@ export default async function CashBookPage({
 
       <p className="mb-2 text-sm text-zinc-500">Opening balance: {book.openingBalance.toFixed(2)}</p>
 
+      <div className="overflow-x-auto">
       <table className="w-full text-left text-sm">
         <thead>
           <tr className="border-b border-zinc-200 text-zinc-500 dark:border-zinc-800">
@@ -84,6 +85,7 @@ export default async function CashBookPage({
           )}
         </tbody>
       </table>
+      </div>
 
       <div className="mt-4 flex flex-col items-end gap-1 text-sm">
         <p>Total in: {book.totalIn.toFixed(2)}</p>

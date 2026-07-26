@@ -14,7 +14,7 @@ export default async function ProductsPage() {
 
   return (
     <div>
-      <div className="mb-4 flex items-center justify-between">
+      <div className="mb-4 flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
         <h1 className="text-lg font-semibold text-zinc-900 dark:text-zinc-50">
           Products
         </h1>
@@ -38,6 +38,7 @@ export default async function ProductsPage() {
         <ImportProductsForm />
       </div>
 
+      <div className="overflow-x-auto">
       <table className="w-full text-left text-sm">
         <thead>
           <tr className="border-b border-zinc-200 text-zinc-500 dark:border-zinc-800">
@@ -96,6 +97,7 @@ export default async function ProductsPage() {
           )}
         </tbody>
       </table>
+      </div>
     </div>
   );
 }

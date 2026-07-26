@@ -52,6 +52,7 @@ export default async function ProfitReportPage({
 
       <div>
         <h2 className="mb-2 text-base font-semibold text-zinc-900 dark:text-zinc-50">Product-wise GP</h2>
+        <div className="overflow-x-auto">
         <table className="w-full max-w-2xl text-left text-sm">
           <thead>
             <tr className="border-b border-zinc-200 text-zinc-500 dark:border-zinc-800">
@@ -73,10 +74,12 @@ export default async function ProfitReportPage({
             {byProduct.length === 0 && <tr><td colSpan={4} className="py-4 text-zinc-500">No sales.</td></tr>}
           </tbody>
         </table>
+        </div>
       </div>
 
       <div>
         <h2 className="mb-2 text-base font-semibold text-zinc-900 dark:text-zinc-50">Invoice-wise GP</h2>
+        <div className="overflow-x-auto">
         <table className="w-full max-w-2xl text-left text-sm">
           <thead>
             <tr className="border-b border-zinc-200 text-zinc-500 dark:border-zinc-800">
@@ -98,10 +101,12 @@ export default async function ProfitReportPage({
             {byInvoice.length === 0 && <tr><td colSpan={4} className="py-4 text-zinc-500">No sales.</td></tr>}
           </tbody>
         </table>
+        </div>
       </div>
 
       <div>
         <h2 className="mb-2 text-base font-semibold text-zinc-900 dark:text-zinc-50">Customer-wise GP</h2>
+        <div className="overflow-x-auto">
         <table className="w-full max-w-2xl text-left text-sm">
           <thead>
             <tr className="border-b border-zinc-200 text-zinc-500 dark:border-zinc-800">
@@ -123,6 +128,7 @@ export default async function ProfitReportPage({
             {byCustomer.length === 0 && <tr><td colSpan={4} className="py-4 text-zinc-500">No sales.</td></tr>}
           </tbody>
         </table>
+        </div>
       </div>
     </div>
   );

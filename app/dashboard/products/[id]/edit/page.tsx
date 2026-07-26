@@ -21,7 +21,7 @@ export default async function EditProductPage({
 
   return (
     <div>
-      <div className="mb-4 flex items-center justify-between">
+      <div className="mb-4 flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
         <h1 className="text-lg font-semibold text-zinc-900 dark:text-zinc-50">
           Edit {product.name}
         </h1>

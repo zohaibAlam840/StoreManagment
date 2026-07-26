@@ -33,7 +33,7 @@ export function ProductForm({
       <Field label="Name">
         <input name="name" defaultValue={v.name} required className={inputClass} />
       </Field>
-      <div className="grid grid-cols-2 gap-4">
+      <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
         <Field label="Brand">
           <input name="brand" defaultValue={v.brand ?? ""} className={inputClass} />
         </Field>
@@ -53,7 +53,7 @@ export function ProductForm({
         </Field>
       </div>
 
-      <div className="grid grid-cols-2 gap-4">
+      <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
         <Field label="Unit of measure">
           <input name="unit" defaultValue={v.unit ?? "pcs"} className={inputClass} />
         </Field>
@@ -62,7 +62,7 @@ export function ProductForm({
         </Field>
       </div>
 
-      <div className="grid grid-cols-2 gap-4">
+      <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
         <Field label="Cost price">
           <input
             name="costPrice"
@@ -83,7 +83,7 @@ export function ProductForm({
         </Field>
       </div>
 
-      <div className="grid grid-cols-3 gap-4">
+      <div className="grid grid-cols-1 gap-4 sm:grid-cols-3">
         <Field label="Min stock">
           <input
             name="minStock"

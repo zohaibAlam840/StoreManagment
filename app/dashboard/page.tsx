@@ -41,6 +41,7 @@ export default async function DashboardHome() {
           <h2 className="mb-2 text-base font-semibold text-zinc-900 dark:text-zinc-50">
             Recent invoices
           </h2>
+          <div className="overflow-x-auto">
           <table className="w-full max-w-xl text-left text-sm">
             <thead>
               <tr className="border-b border-zinc-200 text-zinc-500 dark:border-zinc-800">
@@ -66,6 +67,7 @@ export default async function DashboardHome() {
               )}
             </tbody>
           </table>
+          </div>
         </div>
       </div>
     );
@@ -85,11 +87,11 @@ export default async function DashboardHome() {
 
   return (
     <div className="flex flex-col gap-6">
-      <div className="flex items-center justify-between">
+      <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
         <h1 className="text-lg font-semibold text-zinc-900 dark:text-zinc-50">
           Welcome, {user.name}
         </h1>
-        <div className="flex gap-2">
+        <div className="flex flex-wrap gap-2">
           <Link href="/dashboard/invoices/new" className="rounded-md bg-zinc-900 px-4 py-2 text-sm font-medium text-white dark:bg-zinc-50 dark:text-zinc-900">
             + New Sale Invoice
           </Link>
@@ -99,7 +101,7 @@ export default async function DashboardHome() {
         </div>
       </div>
 
-      <div className="grid grid-cols-4 gap-4">
+      <div className="grid grid-cols-2 gap-4 sm:grid-cols-4">
         <div className="rounded-md border border-zinc-200 p-4 dark:border-zinc-800">
           <p className="text-sm text-zinc-500">Today&apos;s sales</p>
           <p className="text-xl font-semibold text-zinc-900 dark:text-zinc-50">{todayTotal.toFixed(2)}</p>
@@ -128,6 +130,7 @@ export default async function DashboardHome() {
         <h2 className="mb-2 text-base font-semibold text-zinc-900 dark:text-zinc-50">
           Recent invoices
         </h2>
+        <div className="overflow-x-auto">
         <table className="w-full max-w-xl text-left text-sm">
           <thead>
             <tr className="border-b border-zinc-200 text-zinc-500 dark:border-zinc-800">
@@ -153,6 +156,7 @@ export default async function DashboardHome() {
             )}
           </tbody>
         </table>
+        </div>
       </div>
     </div>
   );

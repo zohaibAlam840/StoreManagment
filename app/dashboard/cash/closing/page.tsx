@@ -45,6 +45,7 @@ export default async function CashClosingPage() {
         <h2 className="mb-2 text-base font-semibold text-zinc-900 dark:text-zinc-50">
           Past closings
         </h2>
+        <div className="overflow-x-auto">
         <table className="w-full text-left text-sm">
           <thead>
             <tr className="border-b border-zinc-200 text-zinc-500 dark:border-zinc-800">
@@ -76,6 +77,7 @@ export default async function CashClosingPage() {
             )}
           </tbody>
         </table>
+        </div>
       </div>
     </div>
   );

@@ -16,6 +16,7 @@ export default async function ReceivablesReportPage() {
         Receivables
       </h1>
 
+      <div className="overflow-x-auto">
       <table className="w-full max-w-2xl text-left text-sm">
         <thead>
           <tr className="border-b border-zinc-200 text-zinc-500 dark:border-zinc-800">
@@ -50,6 +51,7 @@ export default async function ReceivablesReportPage() {
           )}
         </tbody>
       </table>
+      </div>
 
       <p className="mt-4 max-w-2xl text-right text-base font-semibold text-zinc-900 dark:text-zinc-50">
         Total receivable: {total.toFixed(2)}

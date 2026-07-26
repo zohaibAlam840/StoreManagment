@@ -28,7 +28,7 @@ export function CustomerForm({
       <Field label="Address">
         <textarea name="address" defaultValue={v.address ?? ""} className={inputClass} rows={2} />
       </Field>
-      <div className="grid grid-cols-2 gap-4">
+      <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
         <Field label="Opening balance">
           <input
             name="openingBalance"

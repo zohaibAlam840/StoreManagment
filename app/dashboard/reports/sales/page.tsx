@@ -54,6 +54,7 @@ export default async function SalesReportPage({
         <h2 className="mb-2 text-base font-semibold text-zinc-900 dark:text-zinc-50">
           Sales by {groupBy}
         </h2>
+        <div className="overflow-x-auto">
         <table className="w-full max-w-md text-left text-sm">
           <thead>
             <tr className="border-b border-zinc-200 text-zinc-500 dark:border-zinc-800">
@@ -75,11 +76,13 @@ export default async function SalesReportPage({
             )}
           </tbody>
         </table>
+        </div>
       </div>
 
-      <div className="grid grid-cols-2 gap-8">
+      <div className="grid grid-cols-1 gap-8 lg:grid-cols-2">
         <div>
           <h2 className="mb-2 text-base font-semibold text-zinc-900 dark:text-zinc-50">By product</h2>
+          <div className="overflow-x-auto">
           <table className="w-full text-left text-sm">
             <thead>
               <tr className="border-b border-zinc-200 text-zinc-500 dark:border-zinc-800">
@@ -101,9 +104,11 @@ export default async function SalesReportPage({
               )}
             </tbody>
           </table>
+          </div>
         </div>
         <div>
           <h2 className="mb-2 text-base font-semibold text-zinc-900 dark:text-zinc-50">By customer</h2>
+          <div className="overflow-x-auto">
           <table className="w-full text-left text-sm">
             <thead>
               <tr className="border-b border-zinc-200 text-zinc-500 dark:border-zinc-800">
@@ -123,6 +128,7 @@ export default async function SalesReportPage({
               )}
             </tbody>
           </table>
+          </div>
         </div>
       </div>
     </div>

@@ -16,7 +16,7 @@ export default async function NewCashTransactionPage() {
         or supplier payment — e.g. rent, utilities, owner withdrawals.
       </p>
       <form action={recordCashTransaction} className="flex max-w-md flex-col gap-4">
-        <div className="grid grid-cols-2 gap-4">
+        <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
           <label className="flex flex-col gap-1">
             <span className="text-sm font-medium text-zinc-700 dark:text-zinc-300">Direction</span>
             <select name="direction" className="rounded-md border border-zinc-300 px-3 py-2 text-sm dark:border-zinc-700 dark:bg-zinc-900">

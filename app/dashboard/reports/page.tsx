@@ -23,7 +23,7 @@ export default async function ReportsPage() {
     <div className="flex flex-col gap-8">
       <h1 className="text-lg font-semibold text-zinc-900 dark:text-zinc-50">Reports</h1>
 
-      <div className="grid grid-cols-3 gap-6">
+      <div className="grid grid-cols-1 gap-6 sm:grid-cols-3">
         <div className="rounded-md border border-zinc-200 p-4 dark:border-zinc-800">
           <p className="text-sm text-zinc-500">Net profit (this month)</p>
           <p className="text-xl font-semibold text-zinc-900 dark:text-zinc-50">
@@ -44,7 +44,7 @@ export default async function ReportsPage() {
         </div>
       </div>
 
-      <div className="grid grid-cols-2 gap-4">
+      <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
         <Link href="/dashboard/reports/sales" className="rounded-md border border-zinc-200 p-4 hover:bg-zinc-50 dark:border-zinc-800 dark:hover:bg-zinc-900">
           <h2 className="font-semibold text-zinc-900 dark:text-zinc-50">Sales</h2>
           <p className="text-sm text-zinc-500">Daily / weekly / monthly, product-wise, customer-wise</p>

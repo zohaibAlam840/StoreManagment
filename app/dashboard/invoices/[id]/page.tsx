@@ -67,6 +67,7 @@ export default async function InvoiceDetailPage({
           Last delivery: {lastDeliveryDate ? lastDeliveryDate.toLocaleDateString() : "—"}
         </p>
         <hr className="my-2 border-dashed border-black" />
+        <div className="overflow-x-auto">
         <table className="w-full">
           <thead>
             <tr>
@@ -89,6 +90,7 @@ export default async function InvoiceDetailPage({
             ))}
           </tbody>
         </table>
+        </div>
         <hr className="my-2 border-dashed border-black" />
         <p className="text-right">Subtotal: {invoice.subtotal.toFixed(2)}</p>
         <p className="text-right">Discount: {invoice.discountAmount.toFixed(2)}</p>

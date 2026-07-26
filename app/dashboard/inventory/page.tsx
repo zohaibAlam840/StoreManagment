@@ -34,6 +34,7 @@ export default async function InventoryPage() {
         <h1 className="mb-4 text-lg font-semibold text-zinc-900 dark:text-zinc-50">
           Inventory
         </h1>
+        <div className="overflow-x-auto">
         <table className="w-full text-left text-sm">
           <thead>
             <tr className="border-b border-zinc-200 text-zinc-500 dark:border-zinc-800">
@@ -73,9 +74,10 @@ export default async function InventoryPage() {
             )}
           </tbody>
         </table>
+        </div>
       </div>
 
-      <div className="grid grid-cols-2 gap-8">
+      <div className="grid grid-cols-1 gap-8 lg:grid-cols-2">
         <div>
           <h2 className="mb-2 text-base font-semibold text-zinc-900 dark:text-zinc-50">
             Low stock ({lowStock.length})

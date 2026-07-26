@@ -25,7 +25,7 @@ export default async function PurchaseOrdersPage() {
 
   return (
     <div>
-      <div className="mb-4 flex items-center justify-between">
+      <div className="mb-4 flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
         <h1 className="text-lg font-semibold text-zinc-900 dark:text-zinc-50">
           Purchase Orders
         </h1>
@@ -37,6 +37,7 @@ export default async function PurchaseOrdersPage() {
         </Link>
       </div>
 
+      <div className="overflow-x-auto">
       <table className="w-full text-left text-sm">
         <thead>
           <tr className="border-b border-zinc-200 text-zinc-500 dark:border-zinc-800">
@@ -82,6 +83,7 @@ export default async function PurchaseOrdersPage() {
           )}
         </tbody>
       </table>
+      </div>
     </div>
   );
 }

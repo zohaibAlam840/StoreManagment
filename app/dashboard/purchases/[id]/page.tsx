@@ -35,6 +35,7 @@ export default async function PurchaseDetailPage({
       <p className="mb-1 text-sm">Supplier: {supplier?.name ?? "—"}</p>
       <p className="mb-4 text-sm">Date: {purchase.date.toLocaleString()}</p>
 
+      <div className="overflow-x-auto">
       <table className="w-full text-left text-sm">
         <thead>
           <tr className="border-b border-zinc-200 text-zinc-500 dark:border-zinc-800">
@@ -57,6 +58,7 @@ export default async function PurchaseDetailPage({
           ))}
         </tbody>
       </table>
+      </div>
 
       <div className="mt-4 flex flex-col items-end gap-1 text-sm">
         <p>Subtotal: {purchase.subtotal.toFixed(2)}</p>

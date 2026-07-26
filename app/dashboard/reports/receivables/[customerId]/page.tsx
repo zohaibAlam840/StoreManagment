@@ -26,6 +26,7 @@ export default async function CustomerLedgerPage({
         {customer.name} — Ledger
       </h1>
 
+      <div className="overflow-x-auto">
       <table className="w-full max-w-2xl text-left text-sm">
         <thead>
           <tr className="border-b border-zinc-200 text-zinc-500 dark:border-zinc-800">
@@ -55,6 +56,7 @@ export default async function CustomerLedgerPage({
           ))}
         </tbody>
       </table>
+      </div>
     </div>
   );
 }
