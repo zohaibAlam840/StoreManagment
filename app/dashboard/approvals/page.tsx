@@ -1,7 +1,7 @@
 import { redirect } from "next/navigation";
 import { getCurrentUser } from "@/lib/auth/dal";
 import { listPendingApprovals } from "@/lib/approvals";
-import { resolveApprovalAction } from "@/lib/actions/approvals";
+import { ApprovalActionButtons } from "@/components/ApprovalActionButtons";
 
 export default async function ApprovalsPage() {
   const current = await getCurrentUser();
@@ -29,7 +29,7 @@ export default async function ApprovalsPage() {
           {pending.map((req) => (
             <li
               key={req.id}
-              className="flex items-center justify-between rounded-md border border-zinc-200 p-3 text-sm dark:border-zinc-800"
+              className="flex flex-col gap-3 rounded-md border border-zinc-200 p-3 text-sm sm:flex-row sm:items-center sm:justify-between dark:border-zinc-800"
             >
               <div>
                 <p className="font-medium text-zinc-900 dark:text-zinc-50">
@@ -39,22 +39,7 @@ export default async function ApprovalsPage() {
                   <p className="text-zinc-500">{req.reason}</p>
                 )}
               </div>
-              <div className="flex gap-2">
-                <form
-                  action={resolveApprovalAction.bind(null, req.id, "approved")}
-                >
-                  <button className="rounded-md bg-emerald-600 px-3 py-1.5 text-white">
-                    Approve
-                  </button>
-                </form>
-                <form
-                  action={resolveApprovalAction.bind(null, req.id, "rejected")}
-                >
-                  <button className="rounded-md bg-red-600 px-3 py-1.5 text-white">
-                    Reject
-                  </button>
-                </form>
-              </div>
+              <ApprovalActionButtons requestId={req.id} />
             </li>
           ))}
         </ul>

@@ -9,13 +9,18 @@ import { logAudit } from "@/lib/audit";
 
 type POLineInput = { productId: number; qty: number; expectedCost: number };
 
+export type CreatePurchaseOrderResult = { id: number } | { error: string };
+
+// Returns a structured error instead of throwing: Next.js redacts thrown
+// Server Action error messages in production builds, so validation failures
+// must be returned, not thrown, to actually reach the user.
 export async function createPurchaseOrder(input: {
   supplierId: number;
   lines: POLineInput[];
-}) {
+}): Promise<CreatePurchaseOrderResult> {
   const user = await getCurrentUser();
-  if (user.role !== "admin") throw new Error("Only an admin can create purchase orders");
-  if (input.lines.length === 0) throw new Error("Add at least one product");
+  if (user.role !== "admin") return { error: "Only an admin can create purchase orders" };
+  if (input.lines.length === 0) return { error: "Add at least one product" };
 
   const [{ maxNumber } = { maxNumber: 0 }] = await db
     .select({ maxNumber: sql<number>`coalesce(max(${purchaseOrders.number}), 0)` })

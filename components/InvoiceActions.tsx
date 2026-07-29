@@ -34,7 +34,9 @@ export function InvoiceActions({
     setWorking(true);
     try {
       const result = await voidInvoice(invoiceId, reason);
-      if (result.pending) {
+      if ("error" in result) {
+        setMessage(result.error);
+      } else if ("pending" in result) {
         setMessage("Void request sent for admin approval.");
       } else {
         setMessage("Invoice voided.");

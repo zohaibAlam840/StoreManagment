@@ -10,12 +10,21 @@ import { getCustomerBalanceBefore, getLastDeliveryDateBefore } from "@/lib/custo
 import { logAudit } from "@/lib/audit";
 import { requestApproval } from "@/lib/approvals";
 
-export async function getInvoiceFormData(customerId: number) {
+export type GetInvoiceFormDataResult =
+  | {
+      customer: typeof customers.$inferSelect;
+      previousBalance: number;
+      lastDeliveryDate: string | null;
+      rates: Record<number, number>;
+    }
+  | { error: string };
+
+export async function getInvoiceFormData(customerId: number): Promise<GetInvoiceFormDataResult> {
   await getCurrentUser();
   const now = new Date();
 
   const [customer] = await db.select().from(customers).where(eq(customers.id, customerId));
-  if (!customer) throw new Error("Customer not found");
+  if (!customer) return { error: "Customer not found" };
 
   const rateRows = await db
     .select({ productId: customerRates.productId, rate: customerRates.rate })
@@ -41,12 +50,22 @@ export type CreateInvoiceInput = {
   lines: InvoiceLineInput[];
 };
 
+export type PerformCreateInvoiceResult = { id: number } | { error: string };
+
 // Shared by the direct (admin) path and the approval-executed path so a
 // below-threshold sale approved later is created with identical logic to one
 // an admin enters directly, instead of duplicating the invoice-creation rules.
-export async function performCreateInvoice(actorId: number, input: CreateInvoiceInput) {
+//
+// Returns a structured error instead of throwing: Next.js redacts thrown
+// Server Action error messages in production builds (replacing them with a
+// generic "Server Components render" message), so validation failures like
+// "not enough stock" must be returned, not thrown, to actually reach the user.
+export async function performCreateInvoice(
+  actorId: number,
+  input: CreateInvoiceInput
+): Promise<PerformCreateInvoiceResult> {
   if (input.lines.length === 0) {
-    throw new Error("Add at least one product to the invoice");
+    return { error: "Add at least one product to the invoice" };
   }
 
   const productIds = input.lines.map((l) => l.productId);
@@ -58,7 +77,7 @@ export async function performCreateInvoice(actorId: number, input: CreateInvoice
     const stock = stockByProduct.get(line.productId) ?? 0;
     if (line.qty > stock) {
       const name = productById.get(line.productId)?.name ?? `#${line.productId}`;
-      throw new Error(`Not enough stock for ${name}: only ${stock} available`);
+      return { error: `Not enough stock for ${name}: only ${stock} available` };
     }
   }
 
@@ -80,9 +99,9 @@ export async function performCreateInvoice(actorId: number, input: CreateInvoice
       )
     );
   if (possibleDuplicate) {
-    throw new Error(
-      `This looks like a duplicate of invoice #${possibleDuplicate.number} created moments ago. Refresh the invoice list to confirm before resubmitting.`
-    );
+    return {
+      error: `This looks like a duplicate of invoice #${possibleDuplicate.number} created moments ago. Refresh the invoice list to confirm before resubmitting.`,
+    };
   }
 
   const [{ maxNumber } = { maxNumber: 0 }] = await db
@@ -137,16 +156,19 @@ export async function performCreateInvoice(actorId: number, input: CreateInvoice
   return { id: invoice.id };
 }
 
+export type CreateInvoiceResult =
+  | { id: number }
+  | { pending: true; approvalId: number }
+  | { error: string };
+
 // Below-cost and below-minimum-margin sales require admin approval
 // (requirement #10). An admin entering the sale IS the approver, so only a
 // salesman's below-threshold line gets queued instead of completed directly.
-export async function createInvoice(
-  input: CreateInvoiceInput
-): Promise<{ id: number; pending?: false } | { pending: true; approvalId: number }> {
+export async function createInvoice(input: CreateInvoiceInput): Promise<CreateInvoiceResult> {
   const user = await getCurrentUser();
 
   if (input.lines.length === 0) {
-    throw new Error("Add at least one product to the invoice");
+    return { error: "Add at least one product to the invoice" };
   }
 
   const productIds = input.lines.map((l) => l.productId);
@@ -174,16 +196,20 @@ export async function createInvoice(
     return { pending: true, approvalId: request.id };
   }
 
-  const result = await performCreateInvoice(user.id, input);
-  return { id: result.id };
+  return performCreateInvoice(user.id, input);
 }
+
+export type PerformVoidInvoiceResult = { voided: true } | { error: string };
 
 // Reverses the stock movements from the original sale and marks the invoice
 // void, rather than deleting the row, so financial history stays intact.
-export async function performVoidInvoice(invoiceId: number, actorId: number) {
+export async function performVoidInvoice(
+  invoiceId: number,
+  actorId: number
+): Promise<PerformVoidInvoiceResult> {
   const [invoice] = await db.select().from(invoices).where(eq(invoices.id, invoiceId));
-  if (!invoice) throw new Error("Invoice not found");
-  if (invoice.status === "void") return;
+  if (!invoice) return { error: "Invoice not found" };
+  if (invoice.status === "void") return { voided: true };
 
   const lines = await db.select().from(invoiceLines).where(eq(invoiceLines.invoiceId, invoiceId));
   for (const line of lines) {
@@ -211,16 +237,22 @@ export async function performVoidInvoice(invoiceId: number, actorId: number) {
     before: invoice,
     after,
   });
+
+  return { voided: true };
 }
+
+export type VoidInvoiceResult =
+  | { voided: true }
+  | { pending: true; approvalId: number }
+  | { error: string };
 
 // Voiding/undoing a posted invoice requires admin approval (requirement #10)
 // when requested by a salesman; an admin can void directly.
-export async function voidInvoice(invoiceId: number, reason: string) {
+export async function voidInvoice(invoiceId: number, reason: string): Promise<VoidInvoiceResult> {
   const user = await getCurrentUser();
 
   if (user.role === "admin") {
-    await performVoidInvoice(invoiceId, user.id);
-    return { voided: true as const };
+    return performVoidInvoice(invoiceId, user.id);
   }
 
   const request = await requestApproval({
@@ -229,5 +261,5 @@ export async function voidInvoice(invoiceId: number, reason: string) {
     reason: reason || "Salesman requested invoice void",
     requestedBy: user.id,
   });
-  return { pending: true as const, approvalId: request.id };
+  return { pending: true, approvalId: request.id };
 }

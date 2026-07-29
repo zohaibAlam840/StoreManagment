@@ -107,9 +107,17 @@ export function InvoiceForm({
     setLoadingCustomer(true);
     try {
       const data = await getInvoiceFormData(c.id);
+      if ("error" in data) {
+        setError(data.error);
+        setCustomer(null);
+        return;
+      }
       setPreviousBalance(data.previousBalance);
       setLastDeliveryDate(data.lastDeliveryDate);
       setRates(data.rates as Record<number, number>);
+    } catch (e) {
+      setError(e instanceof Error ? e.message : "Failed to load customer details");
+      setCustomer(null);
     } finally {
       setLoadingCustomer(false);
     }
@@ -157,7 +165,12 @@ export function InvoiceForm({
         discountAmount,
         lines: lines.map((l) => ({ productId: l.productId, qty: l.qty, rate: l.rate })),
       });
-      if ("pending" in result && result.pending) {
+      if ("error" in result) {
+        setError(result.error);
+        setSubmitting(false);
+        return;
+      }
+      if ("pending" in result) {
         setPendingMessage(
           "One or more items are priced below cost or minimum margin, so this invoice needs admin approval before it's finalized. It won't appear as a sale until approved."
         );

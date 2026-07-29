@@ -81,6 +81,11 @@ export function PurchaseForm({
         otherExpenses,
         lines: lines.map((l) => ({ productId: l.productId, qty: l.qty, cost: l.cost })),
       });
+      if ("error" in result) {
+        setError(result.error);
+        setSubmitting(false);
+        return;
+      }
       router.push(`/dashboard/purchases/${result.id}`);
     } catch (e) {
       setError(e instanceof Error ? e.message : "Failed to record purchase");

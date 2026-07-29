@@ -59,10 +59,15 @@ export function PurchaseOrderForm({
     setError(null);
     setSubmitting(true);
     try {
-      await createPurchaseOrder({
+      const result = await createPurchaseOrder({
         supplierId: Number(supplierId),
         lines: lines.map((l) => ({ productId: l.productId, qty: l.qty, expectedCost: l.expectedCost })),
       });
+      if ("error" in result) {
+        setError(result.error);
+        setSubmitting(false);
+        return;
+      }
       router.push("/dashboard/purchases/orders");
     } catch (e) {
       setError(e instanceof Error ? e.message : "Failed to create purchase order");
