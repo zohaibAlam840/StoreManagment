@@ -93,15 +93,17 @@ export const customerRates = sqliteTable(
   (table) => [uniqueIndex("customer_rates_customer_product_idx").on(table.customerId, table.productId)]
 );
 
-export const paymentModes = ["cash", "credit", "bank_transfer"] as const;
+export const paymentModes = ["cash", "credit", "bank_transfer", "adjustment"] as const;
 export type PaymentMode = (typeof paymentModes)[number];
 
-export const invoiceStatuses = ["posted", "void"] as const;
+export const invoiceStatuses = ["draft", "posted", "void"] as const;
 export type InvoiceStatus = (typeof invoiceStatuses)[number];
 
 export const invoices = sqliteTable("invoices", {
   id: integer("id").primaryKey({ autoIncrement: true }),
-  number: integer("number").notNull().unique(),
+  // Nullable: a draft doesn't consume a sequential invoice number until it's
+  // finalized, so discarded drafts never leave gaps in the printed sequence.
+  number: integer("number").unique(),
   customerId: integer("customer_id")
     .notNull()
     .references(() => customers.id),
@@ -113,6 +115,10 @@ export const invoices = sqliteTable("invoices", {
   subtotal: real("subtotal").notNull(),
   total: real("total").notNull(),
   status: text("status").$type<InvoiceStatus>().notNull().default("posted"),
+  // Holds the in-progress line items while status is "draft" (a draft may
+  // have incomplete/changing lines that shouldn't touch invoice_lines or
+  // stock until finalized). Unused once posted.
+  draftPayload: text("draft_payload", { mode: "json" }),
   createdBy: integer("created_by")
     .notNull()
     .references(() => users.id),
@@ -136,7 +142,46 @@ export const invoiceLines = sqliteTable("invoice_lines", {
   costAtSale: real("cost_at_sale").notNull(),
 });
 
-export const stockMovementTypes = ["purchase", "sale", "adjustment", "damage"] as const;
+// A return references the original invoice for traceability, but stands as
+// its own document (own number, own lines) rather than mutating the
+// original invoice, so the original sale's history stays intact.
+export const salesReturns = sqliteTable("sales_returns", {
+  id: integer("id").primaryKey({ autoIncrement: true }),
+  number: integer("number").notNull().unique(),
+  invoiceId: integer("invoice_id")
+    .notNull()
+    .references(() => invoices.id),
+  customerId: integer("customer_id")
+    .notNull()
+    .references(() => customers.id),
+  date: integer("date", { mode: "timestamp" })
+    .notNull()
+    .default(sql`(unixepoch())`),
+  reason: text("reason"),
+  subtotal: real("subtotal").notNull(),
+  total: real("total").notNull(),
+  createdBy: integer("created_by")
+    .notNull()
+    .references(() => users.id),
+  createdAt: integer("created_at", { mode: "timestamp" })
+    .notNull()
+    .default(sql`(unixepoch())`),
+});
+
+export const salesReturnLines = sqliteTable("sales_return_lines", {
+  id: integer("id").primaryKey({ autoIncrement: true }),
+  salesReturnId: integer("sales_return_id")
+    .notNull()
+    .references(() => salesReturns.id),
+  productId: integer("product_id")
+    .notNull()
+    .references(() => products.id),
+  qty: real("qty").notNull(),
+  rate: real("rate").notNull(),
+  costAtSale: real("cost_at_sale").notNull(),
+});
+
+export const stockMovementTypes = ["purchase", "sale", "adjustment", "damage", "return"] as const;
 export type StockMovementType = (typeof stockMovementTypes)[number];
 
 // Single append-only source of truth for perpetual inventory. Stock-on-hand
@@ -163,6 +208,10 @@ export const payments = sqliteTable("payments", {
   customerId: integer("customer_id")
     .notNull()
     .references(() => customers.id),
+  // Set when this receipt was collected at the point of sale (requirement
+  // #10's Payment/Receipt section on the invoice itself); null for payments
+  // recorded later against the customer's running balance in general.
+  invoiceId: integer("invoice_id").references(() => invoices.id),
   amount: real("amount").notNull(),
   mode: text("mode").$type<PaymentMode>().notNull().default("cash"),
   date: integer("date", { mode: "timestamp" })

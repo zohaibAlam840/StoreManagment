@@ -146,7 +146,9 @@ export async function getProfitByInvoice(from: Date, to: Date) {
   const map = new Map<number, { number: number; customerName: string; revenue: number; cost: number; gp: number }>();
   for (const r of rows) {
     const existing = map.get(r.invoiceId) ?? {
-      number: r.number,
+      // Posted invoices (this query's WHERE clause) always have a number —
+      // only drafts leave it null, and drafts never reach this query.
+      number: r.number ?? 0,
       customerName: r.customerName ?? "—",
       revenue: 0,
       cost: 0,

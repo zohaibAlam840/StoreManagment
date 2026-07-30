@@ -52,7 +52,7 @@ export default async function CustomersPage() {
             <th className="py-2">Phone</th>
             {isAdmin && <th className="py-2">Credit limit</th>}
             <th className="py-2">Balance</th>
-            {isAdmin && <th className="py-2"></th>}
+            <th className="py-2"></th>
           </tr>
         </thead>
         <tbody>
@@ -62,21 +62,27 @@ export default async function CustomersPage() {
               <td className="py-2">{c.phone ?? "—"}</td>
               {isAdmin && <td className="py-2">{c.creditLimit?.toFixed(2) ?? "—"}</td>}
               <td className="py-2">{balances[i].toFixed(2)}</td>
-              {isAdmin && (
-                <td className="py-2">
+              <td className="py-2 flex gap-3">
+                <Link
+                  href={`/dashboard/reports/receivables/${c.id}`}
+                  className="text-zinc-600 underline dark:text-zinc-400"
+                >
+                  Ledger
+                </Link>
+                {isAdmin && (
                   <Link
                     href={`/dashboard/customers/${c.id}/edit`}
                     className="text-zinc-600 underline dark:text-zinc-400"
                   >
                     Edit
                   </Link>
-                </td>
-              )}
+                )}
+              </td>
             </tr>
           ))}
           {allCustomers.length === 0 && (
             <tr>
-              <td colSpan={isAdmin ? 5 : 3} className="py-4 text-zinc-500">
+              <td colSpan={isAdmin ? 5 : 4} className="py-4 text-zinc-500">
                 No customers yet.
               </td>
             </tr>

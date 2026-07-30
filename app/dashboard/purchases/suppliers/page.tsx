@@ -42,7 +42,13 @@ export default async function SuppliersPage() {
               <td className="py-2">{s.phone ?? "—"}</td>
               <td className="py-2">{balances[i].toFixed(2)}</td>
               <td className="py-2">{s.active ? "Yes" : "No"}</td>
-              <td className="py-2">
+              <td className="py-2 flex gap-3">
+                <Link
+                  href={`/dashboard/purchases/suppliers/${s.id}/ledger`}
+                  className="text-zinc-600 underline dark:text-zinc-400"
+                >
+                  Ledger
+                </Link>
                 <Link
                   href={`/dashboard/purchases/suppliers/${s.id}/edit`}
                   className="text-zinc-600 underline dark:text-zinc-400"

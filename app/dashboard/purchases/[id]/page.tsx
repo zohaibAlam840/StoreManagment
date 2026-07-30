@@ -2,12 +2,15 @@ import { eq } from "drizzle-orm";
 import { notFound } from "next/navigation";
 import { db } from "@/lib/db/client";
 import { purchases, purchaseLines, suppliers, products } from "@/lib/db/schema";
+import { getCurrentUser } from "@/lib/auth/dal";
+import { CorrectPurchaseCostForm } from "@/components/CorrectPurchaseCostForm";
 
 export default async function PurchaseDetailPage({
   params,
 }: {
   params: Promise<{ id: string }>;
 }) {
+  const user = await getCurrentUser();
   const { id } = await params;
   const purchaseId = Number(id);
 
@@ -18,6 +21,7 @@ export default async function PurchaseDetailPage({
 
   const lines = await db
     .select({
+      id: purchaseLines.id,
       qty: purchaseLines.qty,
       cost: purchaseLines.cost,
       productName: products.name,
@@ -35,6 +39,14 @@ export default async function PurchaseDetailPage({
       <p className="mb-1 text-sm">Supplier: {supplier?.name ?? "—"}</p>
       <p className="mb-4 text-sm">Date: {purchase.date.toLocaleString()}</p>
 
+      {user.role === "admin" && (
+        <p className="mb-4 text-xs text-zinc-500">
+          Received stock before the supplier's final rate was confirmed? Record it here with your
+          best estimate, then use <strong>Correct</strong> on a line once the real invoice arrives —
+          it updates this purchase&apos;s totals and the product&apos;s standard cost together.
+        </p>
+      )}
+
       <div className="overflow-x-auto">
       <table className="w-full text-left text-sm">
         <thead>
@@ -43,17 +55,23 @@ export default async function PurchaseDetailPage({
             <th className="py-2">Qty</th>
             <th className="py-2">Cost</th>
             <th className="py-2">Amount</th>
+            {user.role === "admin" && <th className="py-2"></th>}
           </tr>
         </thead>
         <tbody>
-          {lines.map((l, i) => (
-            <tr key={i} className="border-b border-zinc-100 dark:border-zinc-900">
+          {lines.map((l) => (
+            <tr key={l.id} className="border-b border-zinc-100 dark:border-zinc-900">
               <td className="py-2">{l.productName}</td>
               <td className="py-2">
                 {l.qty} {l.unit}
               </td>
               <td className="py-2">{l.cost.toFixed(2)}</td>
               <td className="py-2">{(l.qty * l.cost).toFixed(2)}</td>
+              {user.role === "admin" && (
+                <td className="py-2">
+                  <CorrectPurchaseCostForm lineId={l.id} currentCost={l.cost} />
+                </td>
+              )}
             </tr>
           ))}
         </tbody>

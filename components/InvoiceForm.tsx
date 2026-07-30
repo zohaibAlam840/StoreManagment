@@ -1,8 +1,8 @@
 "use client";
 
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { useRouter } from "next/navigation";
-import { createInvoice, getInvoiceFormData } from "@/lib/actions/invoices";
+import { createInvoice, getInvoiceFormData, saveDraft } from "@/lib/actions/invoices";
 import type { PaymentMode } from "@/lib/db/schema";
 
 type CustomerOption = { id: number; name: string; phone: string | null };
@@ -23,6 +23,7 @@ type LineItem = {
   qty: number;
   rate: number;
   costPrice: number;
+  minSellingPrice: number;
 };
 
 const RECENT_PRODUCTS_KEY = "recentProductIds";
@@ -44,17 +45,31 @@ function pushRecentProductId(id: number) {
   window.localStorage.setItem(RECENT_PRODUCTS_KEY, JSON.stringify(current.slice(0, RECENT_LIMIT)));
 }
 
+type DraftInitial = {
+  id: number;
+  customerId: number | null;
+  paymentMode: PaymentMode;
+  discountAmount: number;
+  lines: { productId: number; qty: number; rate: number }[];
+} | null;
+
 export function InvoiceForm({
   customers,
   products,
   stock,
+  userRole,
+  draft,
 }: {
   customers: CustomerOption[];
   products: ProductOption[];
   stock: Record<number, number>;
+  userRole: "admin" | "salesman";
+  draft?: DraftInitial;
 }) {
   const router = useRouter();
+  const productById = useMemo(() => new Map(products.map((p) => [p.id, p])), [products]);
 
+  const [draftId, setDraftId] = useState<number | null>(draft?.id ?? null);
   const [customerQuery, setCustomerQuery] = useState("");
   const [customer, setCustomer] = useState<CustomerOption | null>(null);
   const [previousBalance, setPreviousBalance] = useState<number | null>(null);
@@ -63,12 +78,40 @@ export function InvoiceForm({
   const [loadingCustomer, setLoadingCustomer] = useState(false);
 
   const [productQuery, setProductQuery] = useState("");
-  const [lines, setLines] = useState<LineItem[]>([]);
-  const [paymentMode, setPaymentMode] = useState<PaymentMode>("cash");
-  const [discountAmount, setDiscountAmount] = useState(0);
+  const [lines, setLines] = useState<LineItem[]>(() => {
+    if (!draft) return [];
+    return draft.lines
+      .map((l) => {
+        const p = productById.get(l.productId);
+        if (!p) return null;
+        return { productId: p.id, name: p.name, unit: p.unit, qty: l.qty, rate: l.rate, costPrice: p.costPrice, minSellingPrice: p.minSellingPrice };
+      })
+      .filter((l): l is LineItem => l !== null);
+  });
+  const [paymentMode, setPaymentMode] = useState<PaymentMode>(draft?.paymentMode ?? "cash");
+  const [discountAmount, setDiscountAmount] = useState(draft?.discountAmount ?? 0);
+
+  const [amountReceived, setAmountReceived] = useState(0);
+  const [receivedTouched, setReceivedTouched] = useState(false);
+  const [receivedMode, setReceivedMode] = useState<PaymentMode>("cash");
+
+  const [overrideUsername, setOverrideUsername] = useState("");
+  const [overridePassword, setOverridePassword] = useState("");
+
   const [error, setError] = useState<string | null>(null);
   const [submitting, setSubmitting] = useState(false);
+  const [savingDraft, setSavingDraft] = useState(false);
+  const [draftSavedAt, setDraftSavedAt] = useState<Date | null>(null);
   const [pendingMessage, setPendingMessage] = useState<string | null>(null);
+
+  // Resume a draft's customer once (draft lines are already seeded in state).
+  useEffect(() => {
+    if (draft?.customerId) {
+      const c = customers.find((c) => c.id === draft.customerId);
+      if (c) selectCustomer(c);
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   const customerMatches = useMemo(() => {
     if (!customerQuery || customer) return [];
@@ -132,7 +175,10 @@ export function InvoiceForm({
         return prev.map((l) => (l.productId === p.id ? { ...l, qty: l.qty + 1 } : l));
       }
       const rate = rates[p.id] ?? p.minSellingPrice;
-      return [...prev, { productId: p.id, name: p.name, unit: p.unit, qty: 1, rate, costPrice: p.costPrice }];
+      return [
+        ...prev,
+        { productId: p.id, name: p.name, unit: p.unit, qty: 1, rate, costPrice: p.costPrice, minSellingPrice: p.minSellingPrice },
+      ];
     });
   }
 
@@ -146,6 +192,15 @@ export function InvoiceForm({
 
   const subtotal = lines.reduce((sum, l) => sum + l.qty * l.rate, 0);
   const total = subtotal - discountAmount;
+  const hasBelowThresholdLine = lines.some((l) => l.rate < l.minSellingPrice);
+  const needsOverride = hasBelowThresholdLine && userRole !== "admin";
+
+  // "Amount received" tracks the total by default (most sales are paid in
+  // full on the spot) until the user deliberately edits it for a
+  // partial-payment or fully-on-credit sale.
+  useEffect(() => {
+    if (!receivedTouched) setAmountReceived(Math.max(0, total));
+  }, [total, receivedTouched]);
 
   async function submit() {
     if (!customer) {
@@ -159,12 +214,20 @@ export function InvoiceForm({
     setError(null);
     setSubmitting(true);
     try {
-      const result = await createInvoice({
+      const input = {
         customerId: customer.id,
         paymentMode,
         discountAmount,
         lines: lines.map((l) => ({ productId: l.productId, qty: l.qty, rate: l.rate })),
-      });
+        amountReceived,
+        receivedMode,
+      };
+      const override =
+        needsOverride && overrideUsername && overridePassword
+          ? { username: overrideUsername, password: overridePassword }
+          : undefined;
+
+      const result = await createInvoice(input, override);
       if ("error" in result) {
         setError(result.error);
         setSubmitting(false);
@@ -172,7 +235,7 @@ export function InvoiceForm({
       }
       if ("pending" in result) {
         setPendingMessage(
-          "One or more items are priced below cost or minimum margin, so this invoice needs admin approval before it's finalized. It won't appear as a sale until approved."
+          "One or more items are priced below cost or minimum margin, so this invoice needs admin approval before it's finalized. It won't appear as a sale until approved. Ask an admin to enter their password above to complete it immediately instead."
         );
         setSubmitting(false);
         return;
@@ -181,6 +244,33 @@ export function InvoiceForm({
     } catch (e) {
       setError(e instanceof Error ? e.message : "Failed to create invoice");
       setSubmitting(false);
+    }
+  }
+
+  async function handleSaveDraft() {
+    if (!customer) {
+      setError("Select a customer before saving a draft.");
+      return;
+    }
+    setSavingDraft(true);
+    setError(null);
+    try {
+      const result = await saveDraft(draftId, {
+        customerId: customer.id,
+        paymentMode,
+        discountAmount,
+        lines: lines.map((l) => ({ productId: l.productId, qty: l.qty, rate: l.rate })),
+      });
+      if ("error" in result) {
+        setError(result.error);
+        return;
+      }
+      setDraftId(result.id);
+      setDraftSavedAt(new Date());
+    } catch (e) {
+      setError(e instanceof Error ? e.message : "Failed to save draft");
+    } finally {
+      setSavingDraft(false);
     }
   }
 
@@ -262,7 +352,8 @@ export function InvoiceForm({
       <table className="w-full text-left text-sm">
         <thead>
           <tr className="border-b border-zinc-200 text-zinc-500 dark:border-zinc-800">
-            <th className="py-2">Product</th>
+            <th className="py-2">Sr</th>
+            <th className="py-2">Description</th>
             <th className="py-2">Qty</th>
             <th className="py-2">Rate</th>
             <th className="py-2">Amount</th>
@@ -270,8 +361,9 @@ export function InvoiceForm({
           </tr>
         </thead>
         <tbody>
-          {lines.map((l) => (
+          {lines.map((l, i) => (
             <tr key={l.productId} className="border-b border-zinc-100 dark:border-zinc-900">
+              <td className="py-2 text-zinc-400">{i + 1}</td>
               <td className="py-2">{l.name}</td>
               <td className="py-2">
                 <input
@@ -289,13 +381,14 @@ export function InvoiceForm({
                   value={l.rate}
                   onChange={(e) => updateLine(l.productId, { rate: Number(e.target.value) })}
                   className={`w-24 rounded-md border px-2 py-1 dark:bg-zinc-900 ${
-                    l.rate < l.costPrice
+                    l.rate < l.minSellingPrice
                       ? "border-red-400 text-red-600"
                       : "border-zinc-300 dark:border-zinc-700"
                   }`}
                 />
-                {l.rate < l.costPrice && (
-                  <p className="text-xs text-red-500">below cost</p>
+                {l.rate < l.costPrice && <p className="text-xs text-red-500">below cost</p>}
+                {l.rate >= l.costPrice && l.rate < l.minSellingPrice && (
+                  <p className="text-xs text-amber-600">below minimum margin</p>
                 )}
               </td>
               <td className="py-2">{(l.qty * l.rate).toFixed(2)}</td>
@@ -312,7 +405,7 @@ export function InvoiceForm({
           ))}
           {lines.length === 0 && (
             <tr>
-              <td colSpan={5} className="py-4 text-zinc-500">
+              <td colSpan={6} className="py-4 text-zinc-500">
                 No products added yet.
               </td>
             </tr>
@@ -345,6 +438,71 @@ export function InvoiceForm({
         </label>
       </div>
 
+      <div className="rounded-md border border-zinc-200 p-4 dark:border-zinc-800">
+        <h3 className="mb-3 text-sm font-semibold text-zinc-900 dark:text-zinc-50">
+          Payment / Receipt
+        </h3>
+        <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
+          <label className="flex flex-col gap-1">
+            <span className="text-sm font-medium text-zinc-700 dark:text-zinc-300">
+              Amount received now
+            </span>
+            <input
+              type="number"
+              step="0.01"
+              value={amountReceived}
+              onChange={(e) => {
+                setReceivedTouched(true);
+                setAmountReceived(Number(e.target.value));
+              }}
+              className="rounded-md border border-zinc-300 px-3 py-2 text-sm dark:border-zinc-700 dark:bg-zinc-900"
+            />
+          </label>
+          <label className="flex flex-col gap-1">
+            <span className="text-sm font-medium text-zinc-700 dark:text-zinc-300">Received via</span>
+            <select
+              value={receivedMode}
+              onChange={(e) => setReceivedMode(e.target.value as PaymentMode)}
+              className="rounded-md border border-zinc-300 px-3 py-2 text-sm dark:border-zinc-700 dark:bg-zinc-900"
+            >
+              <option value="cash">Cash</option>
+              <option value="bank_transfer">Bank</option>
+              <option value="adjustment">Adjustment</option>
+            </select>
+          </label>
+        </div>
+        <p className="mt-2 text-xs text-zinc-500">
+          Balance remaining on this bill: {(total - amountReceived).toFixed(2)}
+        </p>
+      </div>
+
+      {needsOverride && (
+        <div className="rounded-md border border-amber-300 bg-amber-50 p-4 dark:border-amber-800 dark:bg-amber-950">
+          <h3 className="mb-2 text-sm font-semibold text-amber-900 dark:text-amber-200">
+            Admin authorization needed
+          </h3>
+          <p className="mb-3 text-xs text-amber-800 dark:text-amber-300">
+            An item is priced below cost or minimum margin. Have an admin type their password here
+            to complete this sale immediately, or leave blank to submit it for approval instead.
+          </p>
+          <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
+            <input
+              value={overrideUsername}
+              onChange={(e) => setOverrideUsername(e.target.value)}
+              placeholder="Admin username"
+              className="rounded-md border border-amber-300 bg-white px-3 py-2 text-sm dark:border-amber-700 dark:bg-zinc-900"
+            />
+            <input
+              type="password"
+              value={overridePassword}
+              onChange={(e) => setOverridePassword(e.target.value)}
+              placeholder="Admin password"
+              className="rounded-md border border-amber-300 bg-white px-3 py-2 text-sm dark:border-amber-700 dark:bg-zinc-900"
+            />
+          </div>
+        </div>
+      )}
+
       <div className="flex flex-col items-end gap-1 text-sm">
         <p>Subtotal: {subtotal.toFixed(2)}</p>
         <p className="text-base font-semibold text-zinc-900 dark:text-zinc-50">
@@ -354,15 +512,28 @@ export function InvoiceForm({
 
       {error && <p className="text-sm text-red-600">{error}</p>}
       {pendingMessage && <p className="text-sm text-amber-600">{pendingMessage}</p>}
+      {draftSavedAt && !pendingMessage && (
+        <p className="text-sm text-emerald-600">Draft saved at {draftSavedAt.toLocaleTimeString()}.</p>
+      )}
 
-      <button
-        type="button"
-        onClick={submit}
-        disabled={submitting || !!pendingMessage}
-        className="w-fit rounded-md bg-zinc-900 px-4 py-2 text-sm font-medium text-white disabled:opacity-50 dark:bg-zinc-50 dark:text-zinc-900"
-      >
-        {submitting ? "Saving..." : "Create invoice"}
-      </button>
+      <div className="flex flex-wrap gap-2">
+        <button
+          type="button"
+          onClick={submit}
+          disabled={submitting || !!pendingMessage}
+          className="w-fit rounded-md bg-zinc-900 px-4 py-2 text-sm font-medium text-white disabled:opacity-50 dark:bg-zinc-50 dark:text-zinc-900"
+        >
+          {submitting ? "Saving..." : "Create invoice"}
+        </button>
+        <button
+          type="button"
+          onClick={handleSaveDraft}
+          disabled={savingDraft || submitting}
+          className="w-fit rounded-md border border-zinc-300 px-4 py-2 text-sm disabled:opacity-50 dark:border-zinc-700"
+        >
+          {savingDraft ? "Saving draft..." : "Save as draft"}
+        </button>
+      </div>
     </div>
   );
 }

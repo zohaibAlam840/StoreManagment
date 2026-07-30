@@ -36,6 +36,20 @@
       "when": 1785087457886,
       "tag": "0004_cheerful_stranger",
       "breakpoints": true
+    },
+    {
+      "idx": 5,
+      "version": "6",
+      "when": 1785402103256,
+      "tag": "0005_huge_miracleman",
+      "breakpoints": true
+    },
+    {
+      "idx": 6,
+      "version": "6",
+      "when": 1785402397396,
+      "tag": "0006_living_wong",
+      "breakpoints": true
     }
   ]
 }

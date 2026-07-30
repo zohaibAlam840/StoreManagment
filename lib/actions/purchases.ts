@@ -98,3 +98,46 @@ export async function createPurchase(input: {
 
   return { id: purchase.id };
 }
+
+export type CorrectPurchaseCostResult = { success: true } | { error: string };
+
+// Lets an admin correct a line's cost after receiving stock at an estimated
+// price, once the supplier's actual invoice/rate arrives — updates this
+// purchase's totals and rolls the corrected cost forward as the product's
+// standard cost, rather than requiring a brand-new purchase entry just to
+// fix a number.
+export async function correctPurchaseLineCost(
+  purchaseLineId: number,
+  newCost: number
+): Promise<CorrectPurchaseCostResult> {
+  const user = await getCurrentUser();
+  if (user.role !== "admin") return { error: "Only an admin can correct purchase costs" };
+  if (newCost < 0) return { error: "Cost can't be negative" };
+
+  const [line] = await db.select().from(purchaseLines).where(eq(purchaseLines.id, purchaseLineId));
+  if (!line) return { error: "Purchase line not found" };
+
+  const [purchase] = await db.select().from(purchases).where(eq(purchases.id, line.purchaseId));
+  if (!purchase) return { error: "Purchase not found" };
+
+  const oldCost = line.cost;
+  await db.update(purchaseLines).set({ cost: newCost }).where(eq(purchaseLines.id, purchaseLineId));
+
+  const allLines = await db.select().from(purchaseLines).where(eq(purchaseLines.purchaseId, purchase.id));
+  const subtotal = allLines.reduce((sum, l) => sum + l.qty * (l.id === purchaseLineId ? newCost : l.cost), 0);
+  const total = subtotal + purchase.freight + purchase.loadingUnloading + purchase.otherExpenses;
+
+  await db.update(purchases).set({ subtotal, total }).where(eq(purchases.id, purchase.id));
+  await db.update(products).set({ costPrice: newCost }).where(eq(products.id, line.productId));
+
+  await logAudit({
+    actorId: user.id,
+    action: "purchase.correct_cost",
+    entity: "purchase_lines",
+    entityId: purchaseLineId,
+    before: { cost: oldCost },
+    after: { cost: newCost },
+  });
+
+  return { success: true };
+}

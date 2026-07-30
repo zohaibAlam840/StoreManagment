@@ -1,17 +1,19 @@
 import { eq } from "drizzle-orm";
-import { notFound, redirect } from "next/navigation";
+import { notFound } from "next/navigation";
 import { db } from "@/lib/db/client";
 import { customers } from "@/lib/db/schema";
 import { getCurrentUser } from "@/lib/auth/dal";
 import { getCustomerLedger } from "@/lib/customers";
 
+// Read-only for both roles: a salesman can see a customer's ledger balance
+// and history (requirement #14), just not edit customer details/rates,
+// which stay admin-only on the Customers page itself.
 export default async function CustomerLedgerPage({
   params,
 }: {
   params: Promise<{ customerId: string }>;
 }) {
-  const user = await getCurrentUser();
-  if (user.role !== "admin") redirect("/dashboard");
+  await getCurrentUser();
 
   const { customerId } = await params;
   const id = Number(customerId);

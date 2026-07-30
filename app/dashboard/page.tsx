@@ -11,6 +11,24 @@ import { startOfDay, endOfDay } from "@/lib/cash";
 export default async function DashboardHome() {
   const user = await getCurrentUser();
 
+  // Salesman dashboard is intentionally just the one action they need most —
+  // no sales/stock/receivables summaries, which are admin-only concerns.
+  if (user.role !== "admin") {
+    return (
+      <div className="flex min-h-[60vh] flex-col items-center justify-center gap-4 text-center">
+        <h1 className="text-lg font-semibold text-zinc-900 dark:text-zinc-50">
+          Welcome, {user.name}
+        </h1>
+        <Link
+          href="/dashboard/invoices/new"
+          className="w-full max-w-xs rounded-md bg-zinc-900 px-6 py-4 text-lg font-medium text-white dark:bg-zinc-50 dark:text-zinc-900"
+        >
+          + New Sale Invoice
+        </Link>
+      </div>
+    );
+  }
+
   const recentInvoices = await db
     .select({
       id: invoices.id,
@@ -23,55 +41,6 @@ export default async function DashboardHome() {
     .leftJoin(customers, eq(invoices.customerId, customers.id))
     .orderBy(desc(invoices.number))
     .limit(5);
-
-  if (user.role !== "admin") {
-    return (
-      <div className="flex flex-col gap-6">
-        <h1 className="text-lg font-semibold text-zinc-900 dark:text-zinc-50">
-          Welcome, {user.name}
-        </h1>
-        <Link
-          href="/dashboard/invoices/new"
-          className="w-fit rounded-md bg-zinc-900 px-6 py-3 text-base font-medium text-white dark:bg-zinc-50 dark:text-zinc-900"
-        >
-          + New Sale Invoice
-        </Link>
-
-        <div>
-          <h2 className="mb-2 text-base font-semibold text-zinc-900 dark:text-zinc-50">
-            Recent invoices
-          </h2>
-          <div className="overflow-x-auto">
-          <table className="w-full max-w-xl text-left text-sm">
-            <thead>
-              <tr className="border-b border-zinc-200 text-zinc-500 dark:border-zinc-800">
-                <th className="py-2">#</th>
-                <th className="py-2">Customer</th>
-                <th className="py-2">Total</th>
-              </tr>
-            </thead>
-            <tbody>
-              {recentInvoices.map((r) => (
-                <tr key={r.id} className="border-b border-zinc-100 dark:border-zinc-900">
-                  <td className="py-2">
-                    <Link href={`/dashboard/invoices/${r.id}`} className="underline">
-                      {r.number}
-                    </Link>
-                  </td>
-                  <td className="py-2">{r.customerName ?? "—"}</td>
-                  <td className="py-2">{r.total.toFixed(2)}</td>
-                </tr>
-              ))}
-              {recentInvoices.length === 0 && (
-                <tr><td colSpan={3} className="py-4 text-zinc-500">No invoices yet.</td></tr>
-              )}
-            </tbody>
-          </table>
-          </div>
-        </div>
-      </div>
-    );
-  }
 
   const now = new Date();
   const [todaySales, inventoryReport, pendingApprovals, receivables] = await Promise.all([

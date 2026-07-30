@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import { useRouter } from "next/navigation";
+import Link from "next/link";
 import { voidInvoice } from "@/lib/actions/invoices";
 
 export function InvoiceActions({
@@ -67,6 +68,14 @@ export function InvoiceActions({
         >
           Share on WhatsApp
         </button>
+        {status === "posted" && (
+          <Link
+            href={`/dashboard/invoices/${invoiceId}/return`}
+            className="rounded-md border border-zinc-300 px-3 py-1.5 text-sm dark:border-zinc-700"
+          >
+            Return items
+          </Link>
+        )}
         {status === "posted" && (
           <button
             type="button"
