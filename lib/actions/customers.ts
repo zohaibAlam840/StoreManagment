@@ -26,6 +26,37 @@ function readCustomerFields(formData: FormData) {
   };
 }
 
+export type QuickCreateCustomerResult =
+  | { id: number; name: string; phone: string | null }
+  | { error: string };
+
+// Lets a salesman add a walk-in customer without leaving the invoice screen —
+// deliberately open to both roles (unlike the full customer-management
+// actions below) since blocking a new customer's first sale on "an admin
+// has to set them up first" defeats the point of a quick counter sale. Only
+// name + phone are captured; an admin can fill in address/credit limit/etc.
+// later via the full Customers page if needed.
+export async function quickCreateCustomer(name: string, phone: string): Promise<QuickCreateCustomerResult> {
+  const user = await getCurrentUser();
+  const trimmedName = name.trim();
+  if (!trimmedName) return { error: "Customer name is required" };
+
+  const [created] = await db
+    .insert(customers)
+    .values({ name: trimmedName, phone: phone.trim() || null })
+    .returning();
+
+  await logAudit({
+    actorId: user.id,
+    action: "customer.create",
+    entity: "customers",
+    entityId: created.id,
+    after: created,
+  });
+
+  return { id: created.id, name: created.name, phone: created.phone };
+}
+
 export async function createCustomer(formData: FormData) {
   const user = await requireAdmin();
   const fields = readCustomerFields(formData);
