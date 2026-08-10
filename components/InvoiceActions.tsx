@@ -56,7 +56,7 @@ export function InvoiceActions({
         <button
           type="button"
           onClick={print}
-          className="rounded-md bg-zinc-900 px-3 py-1.5 text-sm font-medium text-white dark:bg-zinc-50 dark:text-zinc-900"
+          className="rounded-md bg-accent px-3 py-1.5 text-sm font-medium text-white dark:bg-accent dark:text-white"
         >
           Print
         </button>

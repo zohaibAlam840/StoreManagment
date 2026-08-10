@@ -4,7 +4,7 @@ import bcrypt from "bcryptjs";
 import { and, desc, eq, gt, inArray, sql } from "drizzle-orm";
 import { db } from "@/lib/db/client";
 import { customers, customerRates, invoices, invoiceLines, products, users, payments } from "@/lib/db/schema";
-import type { PaymentMode } from "@/lib/db/schema";
+import type { PaymentMode, TenderMode } from "@/lib/db/schema";
 import { getCurrentUser } from "@/lib/auth/dal";
 import { getStockOnHandMany, recordStockMovement } from "@/lib/inventory";
 import { getCustomerInvoiceContext, getLastChargedRates } from "@/lib/customers";
@@ -48,15 +48,17 @@ export async function getInvoiceFormData(customerId: number): Promise<GetInvoice
 }
 
 export type InvoiceLineInput = { productId: number; qty: number; rate: number };
+export type ReceiptInput = { mode: TenderMode; amount: number };
 export type CreateInvoiceInput = {
   customerId: number;
   paymentMode: PaymentMode;
   discountAmount: number;
   lines: InvoiceLineInput[];
   // Payment/Receipt section on the invoice itself: how much of the total was
-  // actually collected right now (defaults to 0 = fully on credit) and how.
-  amountReceived?: number;
-  receivedMode?: PaymentMode;
+  // actually collected right now (defaults to none = fully on credit), split
+  // across as many tender lines as the customer needs — e.g. half cash, half
+  // card on the same bill.
+  receipts?: ReceiptInput[];
 };
 
 export type PerformCreateInvoiceResult = { id: number } | { error: string };
@@ -156,16 +158,24 @@ export async function performCreateInvoice(
   }
 
   // Payment/Receipt section: record whatever was actually collected now
-  // against this specific invoice, leaving the rest on the customer's
-  // running balance instead of forcing every sale to be all-cash or
-  // all-credit.
-  const amountReceived = Math.max(0, Math.min(input.amountReceived ?? 0, total));
-  if (amountReceived > 0) {
+  // against this specific invoice, split across one or more tender lines
+  // (e.g. half cash, half card), leaving the rest on the customer's running
+  // balance instead of forcing every sale to be all-one-method or all-credit.
+  // Receipts are capped to the invoice total (not each other) so a mistaken
+  // extra line can't over-collect against this bill.
+  let remaining = total;
+  const validReceipts = (input.receipts ?? []).filter((r) => r.amount > 0);
+  let amountReceived = 0;
+  for (const receipt of validReceipts) {
+    const amount = Math.max(0, Math.min(receipt.amount, remaining));
+    if (amount <= 0) continue;
+    remaining -= amount;
+    amountReceived += amount;
     await db.insert(payments).values({
       customerId: input.customerId,
       invoiceId: invoice.id,
-      amount: amountReceived,
-      mode: input.receivedMode ?? (input.paymentMode === "credit" ? "cash" : input.paymentMode),
+      amount,
+      mode: receipt.mode,
       createdBy: actorId,
     });
   }

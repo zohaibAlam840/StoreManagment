@@ -61,7 +61,7 @@ export function StockAdjustmentForm({
       <button
         type="submit"
         disabled={pending}
-        className="w-fit rounded-md bg-zinc-900 px-4 py-2 text-sm font-medium text-white disabled:opacity-50 dark:bg-zinc-50 dark:text-zinc-900"
+        className="w-fit rounded-md bg-accent px-4 py-2 text-sm font-medium text-white disabled:opacity-50 dark:bg-accent dark:text-white"
       >
         {pending ? "Saving..." : "Record adjustment"}
       </button>

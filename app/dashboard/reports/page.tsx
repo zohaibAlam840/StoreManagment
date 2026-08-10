@@ -1,7 +1,9 @@
 import Link from "next/link";
 import { redirect } from "next/navigation";
+import { TrendingUp, Wallet, AlertTriangle, BarChart3, Boxes, PiggyBank, Users } from "lucide-react";
 import { getCurrentUser } from "@/lib/auth/dal";
 import { getNetProfit, getReceivables } from "@/lib/reports";
+import { StatCard } from "@/components/StatCard";
 
 export default async function ReportsPage() {
   const user = await getCurrentUser();
@@ -24,42 +26,64 @@ export default async function ReportsPage() {
       <h1 className="text-lg font-semibold text-zinc-900 dark:text-zinc-50">Reports</h1>
 
       <div className="grid grid-cols-1 gap-6 sm:grid-cols-3">
-        <div className="rounded-md border border-zinc-200 p-4 dark:border-zinc-800">
-          <p className="text-sm text-zinc-500">Net profit (this month)</p>
-          <p className="text-xl font-semibold text-zinc-900 dark:text-zinc-50">
-            {netProfit.netProfit.toFixed(2)}
-          </p>
-        </div>
-        <div className="rounded-md border border-zinc-200 p-4 dark:border-zinc-800">
-          <p className="text-sm text-zinc-500">Total receivable</p>
-          <p className="text-xl font-semibold text-zinc-900 dark:text-zinc-50">
-            {totalReceivable.toFixed(2)}
-          </p>
-        </div>
-        <div className="rounded-md border border-zinc-200 p-4 dark:border-zinc-800">
-          <p className="text-sm text-zinc-500">Customers over credit limit</p>
-          <p className={`text-xl font-semibold ${overLimitCount > 0 ? "text-red-600" : "text-zinc-900 dark:text-zinc-50"}`}>
-            {overLimitCount}
-          </p>
-        </div>
+        <StatCard label="Net profit (this month)" value={netProfit.netProfit.toFixed(2)} icon={TrendingUp} tone="accent" />
+        <StatCard label="Total receivable" value={totalReceivable.toFixed(2)} icon={Wallet} tone="neutral" />
+        <StatCard
+          label="Customers over credit limit"
+          value={overLimitCount}
+          icon={AlertTriangle}
+          tone={overLimitCount > 0 ? "danger" : "neutral"}
+        />
       </div>
 
       <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
-        <Link href="/dashboard/reports/sales" className="rounded-md border border-zinc-200 p-4 hover:bg-zinc-50 dark:border-zinc-800 dark:hover:bg-zinc-900">
-          <h2 className="font-semibold text-zinc-900 dark:text-zinc-50">Sales</h2>
-          <p className="text-sm text-zinc-500">Daily / weekly / monthly, product-wise, customer-wise</p>
+        <Link
+          href="/dashboard/reports/sales"
+          className="flex items-start gap-3 rounded-xl border border-zinc-200 bg-white p-4 shadow-sm transition-shadow hover:shadow-md dark:border-zinc-800 dark:bg-zinc-950"
+        >
+          <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg bg-accent-soft text-accent-soft-foreground">
+            <BarChart3 size={18} />
+          </span>
+          <span>
+            <h2 className="font-semibold text-zinc-900 dark:text-zinc-50">Sales</h2>
+            <p className="text-sm text-zinc-500">Daily / weekly / monthly, product-wise, customer-wise</p>
+          </span>
         </Link>
-        <Link href="/dashboard/reports/inventory" className="rounded-md border border-zinc-200 p-4 hover:bg-zinc-50 dark:border-zinc-800 dark:hover:bg-zinc-900">
-          <h2 className="font-semibold text-zinc-900 dark:text-zinc-50">Inventory</h2>
-          <p className="text-sm text-zinc-500">Stock valuation, stock ledger (dead/slow/fast in Inventory)</p>
+        <Link
+          href="/dashboard/reports/inventory"
+          className="flex items-start gap-3 rounded-xl border border-zinc-200 bg-white p-4 shadow-sm transition-shadow hover:shadow-md dark:border-zinc-800 dark:bg-zinc-950"
+        >
+          <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg bg-accent-soft text-accent-soft-foreground">
+            <Boxes size={18} />
+          </span>
+          <span>
+            <h2 className="font-semibold text-zinc-900 dark:text-zinc-50">Inventory</h2>
+            <p className="text-sm text-zinc-500">Stock valuation, stock ledger (dead/slow/fast in Inventory)</p>
+          </span>
         </Link>
-        <Link href="/dashboard/reports/profit" className="rounded-md border border-zinc-200 p-4 hover:bg-zinc-50 dark:border-zinc-800 dark:hover:bg-zinc-900">
-          <h2 className="font-semibold text-zinc-900 dark:text-zinc-50">Profit</h2>
-          <p className="text-sm text-zinc-500">Product / invoice / customer GP, and Net Profit</p>
+        <Link
+          href="/dashboard/reports/profit"
+          className="flex items-start gap-3 rounded-xl border border-zinc-200 bg-white p-4 shadow-sm transition-shadow hover:shadow-md dark:border-zinc-800 dark:bg-zinc-950"
+        >
+          <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg bg-accent-soft text-accent-soft-foreground">
+            <PiggyBank size={18} />
+          </span>
+          <span>
+            <h2 className="font-semibold text-zinc-900 dark:text-zinc-50">Profit</h2>
+            <p className="text-sm text-zinc-500">Product / invoice / customer GP, and Net Profit</p>
+          </span>
         </Link>
-        <Link href="/dashboard/reports/receivables" className="rounded-md border border-zinc-200 p-4 hover:bg-zinc-50 dark:border-zinc-800 dark:hover:bg-zinc-900">
-          <h2 className="font-semibold text-zinc-900 dark:text-zinc-50">Receivables</h2>
-          <p className="text-sm text-zinc-500">Outstanding balances and customer ledgers</p>
+        <Link
+          href="/dashboard/reports/receivables"
+          className="flex items-start gap-3 rounded-xl border border-zinc-200 bg-white p-4 shadow-sm transition-shadow hover:shadow-md dark:border-zinc-800 dark:bg-zinc-950"
+        >
+          <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg bg-accent-soft text-accent-soft-foreground">
+            <Users size={18} />
+          </span>
+          <span>
+            <h2 className="font-semibold text-zinc-900 dark:text-zinc-50">Receivables</h2>
+            <p className="text-sm text-zinc-500">Outstanding balances and customer ledgers</p>
+          </span>
         </Link>
       </div>
     </div>

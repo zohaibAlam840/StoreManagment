@@ -35,7 +35,7 @@ export default async function CashClosingPage() {
             <span className="text-sm font-medium text-zinc-700 dark:text-zinc-300">Note</span>
             <input name="note" className="rounded-md border border-zinc-300 px-3 py-2 text-sm dark:border-zinc-700 dark:bg-zinc-900" />
           </label>
-          <button type="submit" className="w-fit rounded-md bg-zinc-900 px-4 py-2 text-sm font-medium text-white dark:bg-zinc-50 dark:text-zinc-900">
+          <button type="submit" className="w-fit rounded-md bg-accent px-4 py-2 text-sm font-medium text-white dark:bg-accent dark:text-white">
             Record closing
           </button>
         </form>
@@ -45,7 +45,7 @@ export default async function CashClosingPage() {
         <h2 className="mb-2 text-base font-semibold text-zinc-900 dark:text-zinc-50">
           Past closings
         </h2>
-        <div className="overflow-x-auto">
+        <div className="overflow-x-auto rounded-xl border border-zinc-200 bg-white p-4 shadow-sm dark:border-zinc-800 dark:bg-zinc-950">
         <table className="w-full text-left text-sm">
           <thead>
             <tr className="border-b border-zinc-200 text-zinc-500 dark:border-zinc-800">

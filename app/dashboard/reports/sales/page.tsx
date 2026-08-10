@@ -45,7 +45,7 @@ export default async function SalesReportPage({
             <option value="month">Month</option>
           </select>
         </label>
-        <button type="submit" className="rounded-md bg-zinc-900 px-3 py-1.5 text-white dark:bg-zinc-50 dark:text-zinc-900">
+        <button type="submit" className="rounded-md bg-accent px-3 py-1.5 text-white dark:bg-accent dark:text-white">
           Filter
         </button>
       </form>
@@ -54,7 +54,7 @@ export default async function SalesReportPage({
         <h2 className="mb-2 text-base font-semibold text-zinc-900 dark:text-zinc-50">
           Sales by {groupBy}
         </h2>
-        <div className="overflow-x-auto">
+        <div className="overflow-x-auto rounded-xl border border-zinc-200 bg-white p-4 shadow-sm dark:border-zinc-800 dark:bg-zinc-950">
         <table className="w-full max-w-md text-left text-sm">
           <thead>
             <tr className="border-b border-zinc-200 text-zinc-500 dark:border-zinc-800">
@@ -82,7 +82,7 @@ export default async function SalesReportPage({
       <div className="grid grid-cols-1 gap-8 lg:grid-cols-2">
         <div>
           <h2 className="mb-2 text-base font-semibold text-zinc-900 dark:text-zinc-50">By product</h2>
-          <div className="overflow-x-auto">
+          <div className="overflow-x-auto rounded-xl border border-zinc-200 bg-white p-4 shadow-sm dark:border-zinc-800 dark:bg-zinc-950">
           <table className="w-full text-left text-sm">
             <thead>
               <tr className="border-b border-zinc-200 text-zinc-500 dark:border-zinc-800">
@@ -108,7 +108,7 @@ export default async function SalesReportPage({
         </div>
         <div>
           <h2 className="mb-2 text-base font-semibold text-zinc-900 dark:text-zinc-50">By customer</h2>
-          <div className="overflow-x-auto">
+          <div className="overflow-x-auto rounded-xl border border-zinc-200 bg-white p-4 shadow-sm dark:border-zinc-800 dark:bg-zinc-950">
           <table className="w-full text-left text-sm">
             <thead>
               <tr className="border-b border-zinc-200 text-zinc-500 dark:border-zinc-800">

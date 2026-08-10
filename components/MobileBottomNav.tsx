@@ -59,7 +59,7 @@ export function MobileBottomNav({
                     onClick={() => setMoreOpen(false)}
                     className={`flex flex-col items-center gap-1 rounded-lg px-2 py-3 text-xs font-medium ${
                       isActive(item.href)
-                        ? "bg-zinc-100 text-zinc-900 dark:bg-zinc-900 dark:text-zinc-50"
+                        ? "bg-accent-soft text-accent-soft-foreground"
                         : "text-zinc-600 dark:text-zinc-400"
                     }`}
                   >
@@ -92,7 +92,7 @@ export function MobileBottomNav({
                 key={item.href}
                 href={item.href}
                 className={`flex flex-1 flex-col items-center gap-0.5 py-2 text-xs font-medium ${
-                  active ? "text-zinc-900 dark:text-zinc-50" : "text-zinc-500 dark:text-zinc-400"
+                  active ? "text-accent" : "text-zinc-500 dark:text-zinc-400"
                 }`}
               >
                 <Icon size={22} strokeWidth={active ? 2.5 : 2} />

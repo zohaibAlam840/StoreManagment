@@ -93,8 +93,24 @@ export const customerRates = sqliteTable(
   (table) => [uniqueIndex("customer_rates_customer_product_idx").on(table.customerId, table.productId)]
 );
 
-export const paymentModes = ["cash", "credit", "bank_transfer", "adjustment"] as const;
+// "credit" only makes sense as an invoice's overall classification (nothing
+// collected yet); the rest are actual tender rails a receipt can be
+// collected through.
+export const paymentModes = ["cash", "card", "easypaisa", "jazzcash", "bank_transfer", "credit", "adjustment"] as const;
 export type PaymentMode = (typeof paymentModes)[number];
+
+export const tenderModes = ["cash", "card", "easypaisa", "jazzcash", "bank_transfer", "adjustment"] as const;
+export type TenderMode = (typeof tenderModes)[number];
+
+export const paymentModeLabels: Record<PaymentMode, string> = {
+  cash: "Cash",
+  card: "Card",
+  easypaisa: "Easypaisa",
+  jazzcash: "JazzCash",
+  bank_transfer: "Bank transfer",
+  credit: "Credit",
+  adjustment: "Adjustment",
+};
 
 export const invoiceStatuses = ["draft", "posted", "void"] as const;
 export type InvoiceStatus = (typeof invoiceStatuses)[number];
@@ -326,8 +342,10 @@ export const supplierPayments = sqliteTable("supplier_payments", {
     .default(sql`(unixepoch())`),
 });
 
-export const cashModes = ["cash", "bank_transfer"] as const;
-export type CashMode = (typeof cashModes)[number];
+// Every tender rail a receipt can be collected through, so the cash/bank
+// book can show (and be filtered to) any of them — not just "cash".
+export const cashModes = tenderModes;
+export type CashMode = TenderMode;
 
 export const cashTransactionDirections = ["in", "out"] as const;
 export type CashTransactionDirection = (typeof cashTransactionDirections)[number];

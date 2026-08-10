@@ -1,7 +1,7 @@
 import { redirect } from "next/navigation";
 import { getCurrentUser } from "@/lib/auth/dal";
 import { getCashBook } from "@/lib/cash";
-import type { CashMode } from "@/lib/db/schema";
+import { tenderModes, paymentModeLabels, type CashMode } from "@/lib/db/schema";
 
 export default async function CashBookPage({
   searchParams,
@@ -12,7 +12,9 @@ export default async function CashBookPage({
   if (user.role !== "admin") redirect("/dashboard");
 
   const { mode: modeParam, from: fromParam, to: toParam } = await searchParams;
-  const mode: CashMode = modeParam === "bank_transfer" ? "bank_transfer" : "cash";
+  const mode: CashMode = (tenderModes as readonly string[]).includes(modeParam ?? "")
+    ? (modeParam as CashMode)
+    : "cash";
 
   const now = new Date();
   const defaultFrom = new Date(now.getFullYear(), now.getMonth(), 1);
@@ -24,15 +26,18 @@ export default async function CashBookPage({
   return (
     <div>
       <h1 className="mb-4 text-lg font-semibold text-zinc-900 dark:text-zinc-50">
-        {mode === "cash" ? "Cash Book" : "Bank Book"}
+        {paymentModeLabels[mode]} Book
       </h1>
 
       <form className="mb-4 flex flex-wrap items-end gap-4 text-sm">
         <label className="flex flex-col gap-1">
           <span className="text-zinc-700 dark:text-zinc-300">Mode</span>
           <select name="mode" defaultValue={mode} className="rounded-md border border-zinc-300 px-2 py-1 dark:border-zinc-700 dark:bg-zinc-900">
-            <option value="cash">Cash</option>
-            <option value="bank_transfer">Bank</option>
+            {tenderModes.map((m) => (
+              <option key={m} value={m}>
+                {paymentModeLabels[m]}
+              </option>
+            ))}
           </select>
         </label>
         <label className="flex flex-col gap-1">
@@ -48,14 +53,14 @@ export default async function CashBookPage({
             className="rounded-md border border-zinc-300 px-2 py-1 dark:border-zinc-700 dark:bg-zinc-900"
           />
         </label>
-        <button type="submit" className="rounded-md bg-zinc-900 px-3 py-1.5 text-white dark:bg-zinc-50 dark:text-zinc-900">
+        <button type="submit" className="rounded-md bg-accent px-3 py-1.5 text-white dark:bg-accent dark:text-white">
           Filter
         </button>
       </form>
 
       <p className="mb-2 text-sm text-zinc-500">Opening balance: {book.openingBalance.toFixed(2)}</p>
 
-      <div className="overflow-x-auto">
+      <div className="overflow-x-auto rounded-xl border border-zinc-200 bg-white p-4 shadow-sm dark:border-zinc-800 dark:bg-zinc-950">
       <table className="w-full text-left text-sm">
         <thead>
           <tr className="border-b border-zinc-200 text-zinc-500 dark:border-zinc-800">

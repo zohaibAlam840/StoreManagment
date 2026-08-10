@@ -1,21 +1,41 @@
 @import "tailwindcss";
 
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  --background: #fffaf5;
+  --foreground: #1c1917;
+  --color-accent: #ea580c;
+  --color-accent-hover: #c2410c;
+  --color-accent-foreground: #ffffff;
+  --color-accent-soft: #fff1e6;
+  --color-accent-soft-foreground: #9a3412;
 }
 
+/* Warmer, softer card language than stock Tailwind defaults — every
+   rounded-md/lg/xl utility across the app picks this up automatically. */
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
+  --color-accent: var(--color-accent);
+  --color-accent-hover: var(--color-accent-hover);
+  --color-accent-foreground: var(--color-accent-foreground);
+  --color-accent-soft: var(--color-accent-soft);
+  --color-accent-soft-foreground: var(--color-accent-soft-foreground);
   --font-sans: var(--font-geist-sans);
   --font-mono: var(--font-geist-mono);
+  --radius-md: 0.625rem;
+  --radius-lg: 0.875rem;
+  --radius-xl: 1.125rem;
 }
 
 @media (prefers-color-scheme: dark) {
   :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
+    --background: #17140f;
+    --foreground: #f2ede6;
+    --color-accent: #fb923c;
+    --color-accent-hover: #fdba74;
+    --color-accent-foreground: #1c1310;
+    --color-accent-soft: #2e1a0d;
+    --color-accent-soft-foreground: #fdba74;
   }
 }
 

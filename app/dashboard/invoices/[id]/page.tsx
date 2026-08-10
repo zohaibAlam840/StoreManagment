@@ -1,7 +1,7 @@
 import { eq } from "drizzle-orm";
 import { notFound } from "next/navigation";
 import { db } from "@/lib/db/client";
-import { invoices, invoiceLines, customers, products, payments } from "@/lib/db/schema";
+import { invoices, invoiceLines, customers, products, payments, paymentModeLabels } from "@/lib/db/schema";
 import { getCustomerBalanceBefore, getLastDeliveryDateBefore } from "@/lib/customers";
 import { getReturnsForInvoice } from "@/lib/actions/salesReturns";
 import { InvoiceActions } from "@/components/InvoiceActions";
@@ -102,7 +102,15 @@ export default async function InvoiceDetailPage({
         <p className="text-right">Subtotal: {invoice.subtotal.toFixed(2)}</p>
         <p className="text-right">Discount: {invoice.discountAmount.toFixed(2)}</p>
         <p className="text-right text-base font-bold">Total: {invoice.total.toFixed(2)}</p>
-        <p className="text-right">Received: {amountReceived.toFixed(2)}</p>
+        {receiptRows.length > 1 ? (
+          receiptRows.map((r) => (
+            <p key={r.id} className="text-right">
+              Received ({paymentModeLabels[r.mode]}): {r.amount.toFixed(2)}
+            </p>
+          ))
+        ) : (
+          <p className="text-right">Received: {amountReceived.toFixed(2)}</p>
+        )}
         {returnedTotal > 0 && <p className="text-right">Returned: {returnedTotal.toFixed(2)}</p>}
         <p className="text-right font-semibold">Balance due (this bill): {balanceDue.toFixed(2)}</p>
         <p className="text-right">

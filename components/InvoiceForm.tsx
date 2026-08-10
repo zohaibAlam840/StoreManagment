@@ -1,9 +1,14 @@
 "use client";
 
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { useRouter } from "next/navigation";
 import { createInvoice, getInvoiceFormData, saveDraft } from "@/lib/actions/invoices";
-import type { PaymentMode } from "@/lib/db/schema";
+import { paymentModes, tenderModes, paymentModeLabels, type PaymentMode, type TenderMode } from "@/lib/db/schema";
+
+// The invoice's own paymentMode is a sale classification, not a tender rail —
+// "adjustment" only makes sense as a receipt line, never as how the whole
+// sale is characterized.
+const SALE_PAYMENT_MODES = paymentModes.filter((m) => m !== "adjustment");
 
 type CustomerOption = { id: number; name: string; phone: string | null };
 type ProductOption = {
@@ -25,6 +30,8 @@ type LineItem = {
   costPrice: number;
   minSellingPrice: number;
 };
+
+type ReceiptLine = { key: number; mode: TenderMode; amount: number };
 
 const RECENT_PRODUCTS_KEY = "recentProductIds";
 const RECENT_LIMIT = 20;
@@ -91,9 +98,13 @@ export function InvoiceForm({
   const [paymentMode, setPaymentMode] = useState<PaymentMode>(draft?.paymentMode ?? "cash");
   const [discountAmount, setDiscountAmount] = useState(draft?.discountAmount ?? 0);
 
-  const [amountReceived, setAmountReceived] = useState(0);
-  const [receivedTouched, setReceivedTouched] = useState(false);
-  const [receivedMode, setReceivedMode] = useState<PaymentMode>("cash");
+  // Split/partial payment: one or more tender lines (e.g. half cash, half
+  // card). The single default line tracks the invoice total automatically
+  // (most sales are paid in full on the spot) until the user adds another
+  // line or edits an amount by hand, at which point auto-sync stops.
+  const [receipts, setReceipts] = useState<ReceiptLine[]>([{ key: 0, mode: "cash", amount: 0 }]);
+  const [receiptsTouched, setReceiptsTouched] = useState(false);
+  const nextReceiptKey = useRef(1);
 
   const [overrideUsername, setOverrideUsername] = useState("");
   const [overridePassword, setOverridePassword] = useState("");
@@ -103,6 +114,25 @@ export function InvoiceForm({
   const [savingDraft, setSavingDraft] = useState(false);
   const [draftSavedAt, setDraftSavedAt] = useState<Date | null>(null);
   const [pendingMessage, setPendingMessage] = useState<string | null>(null);
+
+  // Keyboard flow: Enter moves focus customer -> product search -> qty ->
+  // rate -> back to product search for the next item, so a whole invoice can
+  // be entered without touching the mouse.
+  const customerInputRef = useRef<HTMLInputElement>(null);
+  const productInputRef = useRef<HTMLInputElement>(null);
+  const qtyRefs = useRef<Record<number, HTMLInputElement | null>>({});
+  const rateRefs = useRef<Record<number, HTMLInputElement | null>>({});
+  const [pendingFocusProductId, setPendingFocusProductId] = useState<number | null>(null);
+
+  useEffect(() => {
+    if (pendingFocusProductId == null) return;
+    const el = qtyRefs.current[pendingFocusProductId];
+    if (el) {
+      el.focus();
+      el.select();
+      setPendingFocusProductId(null);
+    }
+  }, [pendingFocusProductId, lines]);
 
   // Resume a draft's customer once (draft lines are already seeded in state).
   useEffect(() => {
@@ -180,6 +210,22 @@ export function InvoiceForm({
         { productId: p.id, name: p.name, unit: p.unit, qty: 1, rate, costPrice: p.costPrice, minSellingPrice: p.minSellingPrice },
       ];
     });
+    setPendingFocusProductId(p.id);
+  }
+
+  function addReceiptLine() {
+    setReceiptsTouched(true);
+    setReceipts((prev) => [...prev, { key: nextReceiptKey.current++, mode: "cash", amount: 0 }]);
+  }
+
+  function updateReceiptLine(key: number, patch: Partial<ReceiptLine>) {
+    setReceiptsTouched(true);
+    setReceipts((prev) => prev.map((r) => (r.key === key ? { ...r, ...patch } : r)));
+  }
+
+  function removeReceiptLine(key: number) {
+    setReceiptsTouched(true);
+    setReceipts((prev) => (prev.length > 1 ? prev.filter((r) => r.key !== key) : prev));
   }
 
   function updateLine(productId: number, patch: Partial<LineItem>) {
@@ -195,12 +241,17 @@ export function InvoiceForm({
   const hasBelowThresholdLine = lines.some((l) => l.rate < l.minSellingPrice);
   const needsOverride = hasBelowThresholdLine && userRole !== "admin";
 
-  // "Amount received" tracks the total by default (most sales are paid in
-  // full on the spot) until the user deliberately edits it for a
-  // partial-payment or fully-on-credit sale.
+  // The single default receipt line tracks the total by default (most sales
+  // are paid in full on the spot) until the user deliberately edits it for a
+  // partial-payment, split-tender, or fully-on-credit sale.
   useEffect(() => {
-    if (!receivedTouched) setAmountReceived(Math.max(0, total));
-  }, [total, receivedTouched]);
+    if (!receiptsTouched) {
+      setReceipts((prev) => [{ ...prev[0], amount: Math.max(0, total) }]);
+    }
+  }, [total, receiptsTouched]);
+
+  const totalReceived = receipts.reduce((sum, r) => sum + (r.amount || 0), 0);
+  const overReceived = totalReceived > total + 0.0001;
 
   async function submit() {
     if (!customer) {
@@ -219,8 +270,9 @@ export function InvoiceForm({
         paymentMode,
         discountAmount,
         lines: lines.map((l) => ({ productId: l.productId, qty: l.qty, rate: l.rate })),
-        amountReceived,
-        receivedMode,
+        receipts: receipts
+          .filter((r) => r.amount > 0)
+          .map((r) => ({ mode: r.mode, amount: r.amount })),
       };
       const override =
         needsOverride && overrideUsername && overridePassword
@@ -281,10 +333,18 @@ export function InvoiceForm({
           Customer
         </label>
         <input
+          ref={customerInputRef}
           value={customerQuery}
           onChange={(e) => {
             setCustomerQuery(e.target.value);
             setCustomer(null);
+          }}
+          onKeyDown={(e) => {
+            if (e.key === "Enter" && customerMatches.length > 0) {
+              e.preventDefault();
+              selectCustomer(customerMatches[0]);
+              setTimeout(() => productInputRef.current?.focus(), 0);
+            }
           }}
           placeholder="Type customer name..."
           className="w-full rounded-md border border-zinc-300 px-3 py-2 text-sm dark:border-zinc-700 dark:bg-zinc-900"
@@ -317,8 +377,15 @@ export function InvoiceForm({
           Add product
         </label>
         <input
+          ref={productInputRef}
           value={productQuery}
           onChange={(e) => setProductQuery(e.target.value)}
+          onKeyDown={(e) => {
+            if (e.key === "Enter" && productMatches.length > 0) {
+              e.preventDefault();
+              addProduct(productMatches[0]);
+            }
+          }}
           placeholder={
             !customer
               ? "Select a customer first..."
@@ -367,19 +434,39 @@ export function InvoiceForm({
               <td className="py-2">{l.name}</td>
               <td className="py-2">
                 <input
+                  ref={(el) => {
+                    qtyRefs.current[l.productId] = el;
+                  }}
                   type="number"
                   step="0.01"
                   value={l.qty}
                   onChange={(e) => updateLine(l.productId, { qty: Number(e.target.value) })}
+                  onKeyDown={(e) => {
+                    if (e.key === "Enter") {
+                      e.preventDefault();
+                      const rateEl = rateRefs.current[l.productId];
+                      rateEl?.focus();
+                      rateEl?.select();
+                    }
+                  }}
                   className="w-20 rounded-md border border-zinc-300 px-2 py-1 dark:border-zinc-700 dark:bg-zinc-900"
                 />
               </td>
               <td className="py-2">
                 <input
+                  ref={(el) => {
+                    rateRefs.current[l.productId] = el;
+                  }}
                   type="number"
                   step="0.01"
                   value={l.rate}
                   onChange={(e) => updateLine(l.productId, { rate: Number(e.target.value) })}
+                  onKeyDown={(e) => {
+                    if (e.key === "Enter") {
+                      e.preventDefault();
+                      productInputRef.current?.focus();
+                    }
+                  }}
                   className={`w-24 rounded-md border px-2 py-1 dark:bg-zinc-900 ${
                     l.rate < l.minSellingPrice
                       ? "border-red-400 text-red-600"
@@ -421,9 +508,11 @@ export function InvoiceForm({
             onChange={(e) => setPaymentMode(e.target.value as PaymentMode)}
             className="rounded-md border border-zinc-300 px-3 py-2 text-sm dark:border-zinc-700 dark:bg-zinc-900"
           >
-            <option value="cash">Cash</option>
-            <option value="credit">Credit</option>
-            <option value="bank_transfer">Bank transfer</option>
+            {SALE_PAYMENT_MODES.map((m) => (
+              <option key={m} value={m}>
+                {paymentModeLabels[m]}
+              </option>
+            ))}
           </select>
         </label>
         <label className="flex flex-col gap-1">
@@ -439,40 +528,67 @@ export function InvoiceForm({
       </div>
 
       <div className="rounded-md border border-zinc-200 p-4 dark:border-zinc-800">
-        <h3 className="mb-3 text-sm font-semibold text-zinc-900 dark:text-zinc-50">
-          Payment / Receipt
-        </h3>
-        <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
-          <label className="flex flex-col gap-1">
-            <span className="text-sm font-medium text-zinc-700 dark:text-zinc-300">
-              Amount received now
-            </span>
-            <input
-              type="number"
-              step="0.01"
-              value={amountReceived}
-              onChange={(e) => {
-                setReceivedTouched(true);
-                setAmountReceived(Number(e.target.value));
-              }}
-              className="rounded-md border border-zinc-300 px-3 py-2 text-sm dark:border-zinc-700 dark:bg-zinc-900"
-            />
-          </label>
-          <label className="flex flex-col gap-1">
-            <span className="text-sm font-medium text-zinc-700 dark:text-zinc-300">Received via</span>
-            <select
-              value={receivedMode}
-              onChange={(e) => setReceivedMode(e.target.value as PaymentMode)}
-              className="rounded-md border border-zinc-300 px-3 py-2 text-sm dark:border-zinc-700 dark:bg-zinc-900"
-            >
-              <option value="cash">Cash</option>
-              <option value="bank_transfer">Bank</option>
-              <option value="adjustment">Adjustment</option>
-            </select>
-          </label>
+        <div className="mb-3 flex items-center justify-between">
+          <h3 className="text-sm font-semibold text-zinc-900 dark:text-zinc-50">
+            Payment / Receipt
+          </h3>
+          <button
+            type="button"
+            onClick={addReceiptLine}
+            className="text-xs text-zinc-600 underline dark:text-zinc-400"
+          >
+            + Split payment
+          </button>
         </div>
+        <div className="flex flex-col gap-3">
+          {receipts.map((r) => (
+            <div key={r.key} className="grid grid-cols-1 gap-2 sm:grid-cols-[1fr_1fr_auto] sm:items-end">
+              <label className="flex flex-col gap-1">
+                <span className="text-sm font-medium text-zinc-700 dark:text-zinc-300">
+                  Amount received now
+                </span>
+                <input
+                  type="number"
+                  step="0.01"
+                  value={r.amount}
+                  onChange={(e) => updateReceiptLine(r.key, { amount: Number(e.target.value) })}
+                  className="rounded-md border border-zinc-300 px-3 py-2 text-sm dark:border-zinc-700 dark:bg-zinc-900"
+                />
+              </label>
+              <label className="flex flex-col gap-1">
+                <span className="text-sm font-medium text-zinc-700 dark:text-zinc-300">Received via</span>
+                <select
+                  value={r.mode}
+                  onChange={(e) => updateReceiptLine(r.key, { mode: e.target.value as TenderMode })}
+                  className="rounded-md border border-zinc-300 px-3 py-2 text-sm dark:border-zinc-700 dark:bg-zinc-900"
+                >
+                  {tenderModes.map((m) => (
+                    <option key={m} value={m}>
+                      {paymentModeLabels[m]}
+                    </option>
+                  ))}
+                </select>
+              </label>
+              {receipts.length > 1 && (
+                <button
+                  type="button"
+                  onClick={() => removeReceiptLine(r.key)}
+                  className="h-fit rounded-md border border-zinc-300 px-3 py-2 text-xs text-red-600 dark:border-zinc-700"
+                >
+                  Remove
+                </button>
+              )}
+            </div>
+          ))}
+        </div>
+        {overReceived && (
+          <p className="mt-2 text-xs text-red-600">
+            Amount received ({totalReceived.toFixed(2)}) is more than the bill total — reduce a line
+            before submitting.
+          </p>
+        )}
         <p className="mt-2 text-xs text-zinc-500">
-          Balance remaining on this bill: {(total - amountReceived).toFixed(2)}
+          Balance remaining on this bill: {(total - totalReceived).toFixed(2)}
         </p>
       </div>
 
@@ -521,7 +637,7 @@ export function InvoiceForm({
           type="button"
           onClick={submit}
           disabled={submitting || !!pendingMessage}
-          className="w-fit rounded-md bg-zinc-900 px-4 py-2 text-sm font-medium text-white disabled:opacity-50 dark:bg-zinc-50 dark:text-zinc-900"
+          className="w-fit rounded-md bg-accent px-4 py-2 text-sm font-medium text-white disabled:opacity-50 dark:bg-accent dark:text-white"
         >
           {submitting ? "Saving..." : "Create invoice"}
         </button>

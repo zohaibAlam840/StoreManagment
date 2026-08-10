@@ -36,7 +36,7 @@ export default async function ProfitReportPage({
           <span className="text-zinc-700 dark:text-zinc-300">To</span>
           <input type="date" name="to" defaultValue={new Date(to.getTime() - 24 * 60 * 60 * 1000).toISOString().slice(0, 10)} className="rounded-md border border-zinc-300 px-2 py-1 dark:border-zinc-700 dark:bg-zinc-900" />
         </label>
-        <button type="submit" className="rounded-md bg-zinc-900 px-3 py-1.5 text-white dark:bg-zinc-50 dark:text-zinc-900">
+        <button type="submit" className="rounded-md bg-accent px-3 py-1.5 text-white dark:bg-accent dark:text-white">
           Filter
         </button>
       </form>
@@ -52,7 +52,7 @@ export default async function ProfitReportPage({
 
       <div>
         <h2 className="mb-2 text-base font-semibold text-zinc-900 dark:text-zinc-50">Product-wise GP</h2>
-        <div className="overflow-x-auto">
+        <div className="overflow-x-auto rounded-xl border border-zinc-200 bg-white p-4 shadow-sm dark:border-zinc-800 dark:bg-zinc-950">
         <table className="w-full max-w-2xl text-left text-sm">
           <thead>
             <tr className="border-b border-zinc-200 text-zinc-500 dark:border-zinc-800">
@@ -79,7 +79,7 @@ export default async function ProfitReportPage({
 
       <div>
         <h2 className="mb-2 text-base font-semibold text-zinc-900 dark:text-zinc-50">Invoice-wise GP</h2>
-        <div className="overflow-x-auto">
+        <div className="overflow-x-auto rounded-xl border border-zinc-200 bg-white p-4 shadow-sm dark:border-zinc-800 dark:bg-zinc-950">
         <table className="w-full max-w-2xl text-left text-sm">
           <thead>
             <tr className="border-b border-zinc-200 text-zinc-500 dark:border-zinc-800">
@@ -106,7 +106,7 @@ export default async function ProfitReportPage({
 
       <div>
         <h2 className="mb-2 text-base font-semibold text-zinc-900 dark:text-zinc-50">Customer-wise GP</h2>
-        <div className="overflow-x-auto">
+        <div className="overflow-x-auto rounded-xl border border-zinc-200 bg-white p-4 shadow-sm dark:border-zinc-800 dark:bg-zinc-950">
         <table className="w-full max-w-2xl text-left text-sm">
           <thead>
             <tr className="border-b border-zinc-200 text-zinc-500 dark:border-zinc-800">

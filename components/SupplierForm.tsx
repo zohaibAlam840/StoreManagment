@@ -45,7 +45,7 @@ export function SupplierForm({
 
       <button
         type="submit"
-        className="mt-2 w-fit rounded-md bg-zinc-900 px-4 py-2 text-sm font-medium text-white dark:bg-zinc-50 dark:text-zinc-900"
+        className="mt-2 w-fit rounded-md bg-accent px-4 py-2 text-sm font-medium text-white dark:bg-accent dark:text-white"
       >
         {submitLabel}
       </button>

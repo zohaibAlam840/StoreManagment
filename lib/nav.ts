@@ -17,6 +17,7 @@ export type NavItem = {
 export const navItems: NavItem[] = [
   { href: "/dashboard", label: "Dashboard", roles: ["admin", "salesman"], icon: "home", mobilePrimary: true },
   { href: "/dashboard/invoices", label: "Sales Invoice", roles: ["admin", "salesman"], icon: "receipt", mobilePrimary: true },
+  { href: "/dashboard/returns", label: "Sales Returns", roles: ["admin", "salesman"], icon: "rotateCcw" },
   { href: "/dashboard/customers", label: "Customers", roles: ["admin", "salesman"], icon: "users", mobilePrimary: true },
   { href: "/dashboard/products", label: "Products", roles: ["admin"], icon: "package" },
   { href: "/dashboard/inventory", label: "Inventory", roles: ["admin"], icon: "boxes", mobilePrimary: true },

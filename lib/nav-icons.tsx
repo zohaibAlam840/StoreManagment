@@ -11,6 +11,7 @@ import {
   UserCog,
   History,
   DatabaseBackup,
+  RotateCcw,
   type LucideIcon,
 } from "lucide-react";
 
@@ -32,6 +33,7 @@ export const navIcons = {
   userCog: UserCog,
   history: History,
   databaseBackup: DatabaseBackup,
+  rotateCcw: RotateCcw,
 } satisfies Record<string, LucideIcon>;
 
 export type NavIconName = keyof typeof navIcons;

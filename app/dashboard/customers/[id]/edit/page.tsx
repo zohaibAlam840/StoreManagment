@@ -68,7 +68,7 @@ export default async function EditCustomerPage({
           Set a special rate per product for this customer. It will be
           suggested automatically when invoicing them (Phase 2).
         </p>
-        <div className="overflow-x-auto">
+        <div className="overflow-x-auto rounded-xl border border-zinc-200 bg-white p-4 shadow-sm dark:border-zinc-800 dark:bg-zinc-950">
         <table className="w-full max-w-2xl text-left text-sm">
           <thead>
             <tr className="border-b border-zinc-200 text-zinc-500 dark:border-zinc-800">
@@ -99,7 +99,7 @@ export default async function EditCustomerPage({
                       />
                       <button
                         type="submit"
-                        className="rounded-md bg-zinc-900 px-2 py-1 text-xs font-medium text-white dark:bg-zinc-50 dark:text-zinc-900"
+                        className="rounded-md bg-accent px-2 py-1 text-xs font-medium text-white dark:bg-accent dark:text-white"
                       >
                         Set
                       </button>

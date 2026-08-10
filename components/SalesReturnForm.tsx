@@ -95,7 +95,7 @@ export function SalesReturnForm({ invoiceId, lines }: { invoiceId: number; lines
         type="button"
         onClick={submit}
         disabled={submitting}
-        className="w-fit rounded-md bg-zinc-900 px-4 py-2 text-sm font-medium text-white disabled:opacity-50 dark:bg-zinc-50 dark:text-zinc-900"
+        className="w-fit rounded-md bg-accent px-4 py-2 text-sm font-medium text-white disabled:opacity-50 dark:bg-accent dark:text-white"
       >
         {submitting ? "Processing..." : "Process return"}
       </button>

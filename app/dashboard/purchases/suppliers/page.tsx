@@ -18,13 +18,13 @@ export default async function SuppliersPage() {
         <h1 className="text-lg font-semibold text-zinc-900 dark:text-zinc-50">Suppliers</h1>
         <Link
           href="/dashboard/purchases/suppliers/new"
-          className="rounded-md bg-zinc-900 px-3 py-1.5 text-sm font-medium text-white dark:bg-zinc-50 dark:text-zinc-900"
+          className="rounded-md bg-accent px-3 py-1.5 text-sm font-medium text-white dark:bg-accent dark:text-white"
         >
           Add supplier
         </Link>
       </div>
 
-      <div className="overflow-x-auto">
+      <div className="overflow-x-auto rounded-xl border border-zinc-200 bg-white p-4 shadow-sm dark:border-zinc-800 dark:bg-zinc-950">
       <table className="w-full text-left text-sm">
         <thead>
           <tr className="border-b border-zinc-200 text-zinc-500 dark:border-zinc-800">

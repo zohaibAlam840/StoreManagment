@@ -34,13 +34,13 @@ export default async function InvoicesPage() {
           </h1>
           <Link
             href="/dashboard/invoices/new"
-            className="rounded-md bg-zinc-900 px-3 py-1.5 text-sm font-medium text-white dark:bg-zinc-50 dark:text-zinc-900"
+            className="rounded-md bg-accent px-3 py-1.5 text-sm font-medium text-white dark:bg-accent dark:text-white"
           >
             New invoice
           </Link>
         </div>
 
-        <div className="overflow-x-auto">
+        <div className="overflow-x-auto rounded-xl border border-zinc-200 bg-white p-4 shadow-sm dark:border-zinc-800 dark:bg-zinc-950">
         <table className="w-full text-left text-sm">
           <thead>
             <tr className="border-b border-zinc-200 text-zinc-500 dark:border-zinc-800">
@@ -88,7 +88,7 @@ export default async function InvoicesPage() {
             Saved but not finalized — useful if you get interrupted mid-sale or need to switch
             between two customers at the counter.
           </p>
-          <div className="overflow-x-auto">
+          <div className="overflow-x-auto rounded-xl border border-zinc-200 bg-white p-4 shadow-sm dark:border-zinc-800 dark:bg-zinc-950">
           <table className="w-full max-w-xl text-left text-sm">
             <thead>
               <tr className="border-b border-zinc-200 text-zinc-500 dark:border-zinc-800">

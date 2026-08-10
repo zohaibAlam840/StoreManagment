@@ -44,7 +44,7 @@ export default async function NewCashTransactionPage() {
           <span className="text-sm font-medium text-zinc-700 dark:text-zinc-300">Note</span>
           <input name="note" className="rounded-md border border-zinc-300 px-3 py-2 text-sm dark:border-zinc-700 dark:bg-zinc-900" />
         </label>
-        <button type="submit" className="w-fit rounded-md bg-zinc-900 px-4 py-2 text-sm font-medium text-white dark:bg-zinc-50 dark:text-zinc-900">
+        <button type="submit" className="w-fit rounded-md bg-accent px-4 py-2 text-sm font-medium text-white dark:bg-accent dark:text-white">
           Record entry
         </button>
       </form>

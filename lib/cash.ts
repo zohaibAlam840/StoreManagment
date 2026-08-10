@@ -1,8 +1,7 @@
 import "server-only";
-import { and, eq } from "drizzle-orm";
+import { eq } from "drizzle-orm";
 import { db } from "@/lib/db/client";
 import {
-  invoices,
   customers,
   payments,
   suppliers,
@@ -18,22 +17,13 @@ export type CashLedgerEntry = {
   amount: number;
 };
 
-// Cash book and bank book are both derived from the same underlying data
-// (invoices, customer/supplier payments, ad-hoc transactions) filtered by
-// payment mode, rather than kept as separately-maintained ledgers that could
-// drift out of sync with the actual sales/purchase records.
+// Cash book and bank book are entirely derived from `payments` (which now
+// covers point-of-sale receipts as well as later collections),
+// `supplierPayments`, and ad-hoc `cashTransactions` — never from
+// invoices.paymentMode directly, since every invoice that actually collects
+// money already creates a matching payments row; counting the invoice
+// total too would double-count that cash.
 async function getAllEntries(mode: CashMode): Promise<CashLedgerEntry[]> {
-  const invoiceRows = await db
-    .select({
-      date: invoices.date,
-      total: invoices.total,
-      number: invoices.number,
-      customerName: customers.name,
-    })
-    .from(invoices)
-    .leftJoin(customers, eq(invoices.customerId, customers.id))
-    .where(and(eq(invoices.paymentMode, mode), eq(invoices.status, "posted")));
-
   const paymentRows = await db
     .select({ date: payments.date, amount: payments.amount, customerName: customers.name })
     .from(payments)
@@ -52,12 +42,6 @@ async function getAllEntries(mode: CashMode): Promise<CashLedgerEntry[]> {
     .where(eq(cashTransactions.mode, mode));
 
   const entries: CashLedgerEntry[] = [
-    ...invoiceRows.map((r) => ({
-      date: r.date,
-      description: `Invoice #${r.number} — ${r.customerName ?? "customer"}`,
-      direction: "in" as const,
-      amount: r.total,
-    })),
     ...paymentRows.map((r) => ({
       date: r.date,
       description: `Payment received — ${r.customerName ?? "customer"}`,
