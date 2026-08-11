@@ -2,6 +2,7 @@
 
 import { eq, sql } from "drizzle-orm";
 import { redirect } from "next/navigation";
+import { revalidatePath } from "next/cache";
 import { db } from "@/lib/db/client";
 import { purchaseOrders, purchaseOrderLines } from "@/lib/db/schema";
 import { getCurrentUser } from "@/lib/auth/dal";
@@ -54,6 +55,7 @@ export async function createPurchaseOrder(input: {
     after: po,
   });
 
+  revalidatePath("/dashboard/purchases/orders");
   return { id: po.id };
 }
 
@@ -77,5 +79,6 @@ export async function cancelPurchaseOrder(id: number) {
     after,
   });
 
+  revalidatePath("/dashboard/purchases/orders");
   redirect("/dashboard/purchases/orders");
 }

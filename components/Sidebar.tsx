@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import type { NavItem } from "@/lib/nav";
+import { getActiveHref, type NavItem } from "@/lib/nav";
 import { navIcons } from "@/lib/nav-icons";
 
 export function Sidebar({
@@ -15,9 +15,18 @@ export function Sidebar({
   userRole: string;
 }) {
   const pathname = usePathname();
+  const activeHref = getActiveHref(pathname, nav);
 
   function isActive(href: string) {
-    return href === "/dashboard" ? pathname === href : pathname.startsWith(href);
+    return href === activeHref;
+  }
+
+  function linkClass(active: boolean) {
+    return `flex items-center gap-2.5 rounded-lg px-3 py-2 text-sm font-medium transition-colors ${
+      active
+        ? "bg-accent-soft text-accent-soft-foreground"
+        : "text-zinc-600 hover:bg-zinc-100 dark:text-zinc-400 dark:hover:bg-zinc-900"
+    }`;
   }
 
   return (
@@ -37,24 +46,41 @@ export function Sidebar({
           <p className="text-xs capitalize text-zinc-500">{userRole}</p>
         </div>
       </div>
-      <nav className="flex flex-1 flex-col gap-0.5 p-2">
+      <nav className="flex flex-1 flex-col gap-0.5 overflow-y-auto p-2">
         {nav.map((item) => {
           const Icon = navIcons[item.icon];
-          const active = isActive(item.href);
+          const childActive = item.children?.some((c) => isActive(c.href)) ?? false;
+          const active = isActive(item.href) || childActive;
           return (
-            <Link
-              key={item.href}
-              href={item.href}
-              aria-current={active ? "page" : undefined}
-              className={`flex items-center gap-2.5 rounded-lg px-3 py-2 text-sm font-medium transition-colors ${
-                active
-                  ? "bg-accent-soft text-accent-soft-foreground"
-                  : "text-zinc-600 hover:bg-zinc-100 dark:text-zinc-400 dark:hover:bg-zinc-900"
-              }`}
-            >
-              <Icon size={18} className="shrink-0" strokeWidth={active ? 2.4 : 2} />
-              {item.label}
-            </Link>
+            <div key={item.href}>
+              <Link
+                href={item.href}
+                aria-current={active ? "page" : undefined}
+                className={linkClass(active)}
+              >
+                <Icon size={18} className="shrink-0" strokeWidth={active ? 2.4 : 2} />
+                {item.label}
+              </Link>
+              {item.children && item.children.length > 0 && (
+                <div className="ml-4 mt-0.5 flex flex-col gap-0.5 border-l border-zinc-200 pl-2 dark:border-zinc-800">
+                  {item.children.map((child) => {
+                    const ChildIcon = navIcons[child.icon];
+                    const childIsActive = isActive(child.href);
+                    return (
+                      <Link
+                        key={child.href}
+                        href={child.href}
+                        aria-current={childIsActive ? "page" : undefined}
+                        className={linkClass(childIsActive)}
+                      >
+                        <ChildIcon size={16} className="shrink-0" strokeWidth={childIsActive ? 2.4 : 2} />
+                        {child.label}
+                      </Link>
+                    );
+                  })}
+                </div>
+              )}
+            </div>
           );
         })}
       </nav>

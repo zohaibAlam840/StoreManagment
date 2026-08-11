@@ -3,6 +3,7 @@ import { db } from "@/lib/db/client";
 import { customers } from "@/lib/db/schema";
 import { getCurrentUser } from "@/lib/auth/dal";
 import { getCustomerCurrentBalance } from "@/lib/customers";
+import { ImportCustomersForm } from "@/components/ImportCustomersForm";
 
 export default async function CustomersPage() {
   const user = await getCurrentUser();
@@ -42,6 +43,12 @@ export default async function CustomersPage() {
           Showing customer ledger balances only. Editing customer details and
           rates requires an admin.
         </p>
+      )}
+
+      {isAdmin && (
+        <div className="mb-4">
+          <ImportCustomersForm />
+        </div>
       )}
 
       <div className="overflow-x-auto rounded-xl border border-zinc-200 bg-white p-4 shadow-sm dark:border-zinc-800 dark:bg-zinc-950">

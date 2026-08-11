@@ -3,6 +3,7 @@
 import bcrypt from "bcryptjs";
 import { eq } from "drizzle-orm";
 import { redirect } from "next/navigation";
+import { revalidatePath } from "next/cache";
 import { db } from "@/lib/db/client";
 import { users, type Role } from "@/lib/db/schema";
 import { getCurrentUser } from "@/lib/auth/dal";
@@ -50,6 +51,7 @@ export async function createUser(
     after: created,
   });
 
+  revalidatePath("/dashboard/users");
   redirect("/dashboard/users");
 }
 
@@ -77,6 +79,7 @@ export async function setUserActive(id: number, active: boolean) {
     after,
   });
 
+  revalidatePath("/dashboard/users");
   redirect("/dashboard/users");
 }
 
@@ -103,5 +106,6 @@ export async function resetPassword(
     entityId: id,
   });
 
+  revalidatePath("/dashboard/users");
   redirect("/dashboard/users");
 }

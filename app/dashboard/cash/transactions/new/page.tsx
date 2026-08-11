@@ -1,6 +1,8 @@
 import { redirect } from "next/navigation";
 import { getCurrentUser } from "@/lib/auth/dal";
 import { recordCashTransaction } from "@/lib/actions/cash";
+import { tenderModes, paymentModeLabels } from "@/lib/db/schema";
+import { SubmitButton } from "@/components/SubmitButton";
 
 export default async function NewCashTransactionPage() {
   const user = await getCurrentUser();
@@ -27,8 +29,11 @@ export default async function NewCashTransactionPage() {
           <label className="flex flex-col gap-1">
             <span className="text-sm font-medium text-zinc-700 dark:text-zinc-300">Mode</span>
             <select name="mode" className="rounded-md border border-zinc-300 px-3 py-2 text-sm dark:border-zinc-700 dark:bg-zinc-900">
-              <option value="cash">Cash</option>
-              <option value="bank_transfer">Bank transfer</option>
+              {tenderModes.map((m) => (
+                <option key={m} value={m}>
+                  {paymentModeLabels[m]}
+                </option>
+              ))}
             </select>
           </label>
         </div>
@@ -44,9 +49,12 @@ export default async function NewCashTransactionPage() {
           <span className="text-sm font-medium text-zinc-700 dark:text-zinc-300">Note</span>
           <input name="note" className="rounded-md border border-zinc-300 px-3 py-2 text-sm dark:border-zinc-700 dark:bg-zinc-900" />
         </label>
-        <button type="submit" className="w-fit rounded-md bg-accent px-4 py-2 text-sm font-medium text-white dark:bg-accent dark:text-white">
+        <SubmitButton
+          pendingLabel="Recording..."
+          className="w-fit rounded-md bg-accent px-4 py-2 text-sm font-medium text-white disabled:opacity-50 dark:bg-accent dark:text-white"
+        >
           Record entry
-        </button>
+        </SubmitButton>
       </form>
     </div>
   );

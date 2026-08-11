@@ -26,6 +26,23 @@ export async function getStockOnHandMany(productIds: number[]): Promise<Map<numb
   return new Map(rows.map((r) => [r.productId, r.total]));
 }
 
+// Unfiltered variant so callers who also need the full active-product list
+// (e.g. the invoice/purchase entry screens) can fetch both in parallel
+// instead of waiting for the product query to resolve just to get the id
+// list this would otherwise need — each awaited round trip to a remote DB
+// adds real latency, so cutting a sequential dependency here is a genuine
+// perceived-speed win, not just a style preference.
+export async function getAllStockOnHand(): Promise<Map<number, number>> {
+  const rows = await db
+    .select({
+      productId: stockLedger.productId,
+      total: sql<number>`coalesce(sum(${stockLedger.qty}), 0)`,
+    })
+    .from(stockLedger)
+    .groupBy(stockLedger.productId);
+  return new Map(rows.map((r) => [r.productId, r.total]));
+}
+
 export async function recordStockMovement(input: {
   productId: number;
   type: StockMovementType;

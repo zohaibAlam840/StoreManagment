@@ -1,6 +1,6 @@
 "use client";
 
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { useRouter } from "next/navigation";
 import { createPurchaseOrder } from "@/lib/actions/purchaseOrders";
 
@@ -22,6 +22,21 @@ export function PurchaseOrderForm({
   const [error, setError] = useState<string | null>(null);
   const [submitting, setSubmitting] = useState(false);
 
+  const productInputRef = useRef<HTMLInputElement>(null);
+  const qtyRefs = useRef<Record<number, HTMLInputElement | null>>({});
+  const costRefs = useRef<Record<number, HTMLInputElement | null>>({});
+  const [pendingFocusProductId, setPendingFocusProductId] = useState<number | null>(null);
+
+  useEffect(() => {
+    if (pendingFocusProductId == null) return;
+    const el = qtyRefs.current[pendingFocusProductId];
+    if (el) {
+      el.focus();
+      el.select();
+      setPendingFocusProductId(null);
+    }
+  }, [pendingFocusProductId, lines]);
+
   const productMatches = useMemo(() => {
     const q = productQuery.trim().toLowerCase();
     if (!q) return [];
@@ -37,6 +52,7 @@ export function PurchaseOrderForm({
       if (existing) return prev.map((l) => (l.productId === p.id ? { ...l, qty: l.qty + 1 } : l));
       return [...prev, { productId: p.id, name: p.name, unit: p.unit, qty: 1, expectedCost: p.costPrice }];
     });
+    setPendingFocusProductId(p.id);
   }
 
   function updateLine(productId: number, patch: Partial<LineItem>) {
@@ -98,8 +114,15 @@ export function PurchaseOrderForm({
           Add product
         </label>
         <input
+          ref={productInputRef}
           value={productQuery}
           onChange={(e) => setProductQuery(e.target.value)}
+          onKeyDown={(e) => {
+            if (e.key === "Enter" && productMatches.length > 0) {
+              e.preventDefault();
+              addProduct(productMatches[0]);
+            }
+          }}
           placeholder="Type to search products..."
           className="w-full rounded-md border border-zinc-300 px-3 py-2 text-sm dark:border-zinc-700 dark:bg-zinc-900"
         />
@@ -135,19 +158,39 @@ export function PurchaseOrderForm({
               <td className="py-2">{l.name}</td>
               <td className="py-2">
                 <input
+                  ref={(el) => {
+                    qtyRefs.current[l.productId] = el;
+                  }}
                   type="number"
                   step="0.01"
                   value={l.qty}
                   onChange={(e) => updateLine(l.productId, { qty: Number(e.target.value) })}
+                  onKeyDown={(e) => {
+                    if (e.key === "Enter") {
+                      e.preventDefault();
+                      const costEl = costRefs.current[l.productId];
+                      costEl?.focus();
+                      costEl?.select();
+                    }
+                  }}
                   className="w-20 rounded-md border border-zinc-300 px-2 py-1 dark:border-zinc-700 dark:bg-zinc-900"
                 />
               </td>
               <td className="py-2">
                 <input
+                  ref={(el) => {
+                    costRefs.current[l.productId] = el;
+                  }}
                   type="number"
                   step="0.01"
                   value={l.expectedCost}
                   onChange={(e) => updateLine(l.productId, { expectedCost: Number(e.target.value) })}
+                  onKeyDown={(e) => {
+                    if (e.key === "Enter") {
+                      e.preventDefault();
+                      productInputRef.current?.focus();
+                    }
+                  }}
                   className="w-24 rounded-md border border-zinc-300 px-2 py-1 dark:border-zinc-700 dark:bg-zinc-900"
                 />
               </td>

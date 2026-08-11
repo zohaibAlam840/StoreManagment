@@ -1,6 +1,9 @@
 import Link from "next/link";
 import { redirect } from "next/navigation";
-import { TrendingUp, Wallet, AlertTriangle, BarChart3, Boxes, PiggyBank, Users } from "lucide-react";
+import { and, gte, lt, ne, sql } from "drizzle-orm";
+import { TrendingUp, Wallet, AlertTriangle, Receipt, BarChart3, Boxes, PiggyBank, Users } from "lucide-react";
+import { db } from "@/lib/db/client";
+import { invoices } from "@/lib/db/schema";
 import { getCurrentUser } from "@/lib/auth/dal";
 import { getNetProfit, getReceivables } from "@/lib/reports";
 import { StatCard } from "@/components/StatCard";
@@ -13,9 +16,16 @@ export default async function ReportsPage() {
   const monthStart = new Date(now.getFullYear(), now.getMonth(), 1);
   const monthEnd = new Date(now.getFullYear(), now.getMonth() + 1, 1);
 
-  const [netProfit, receivables] = await Promise.all([
+  const [netProfit, receivables, [invoiceSummary]] = await Promise.all([
     getNetProfit(monthStart, monthEnd),
     getReceivables(),
+    db
+      .select({
+        count: sql<number>`count(*)`,
+        total: sql<number>`coalesce(sum(${invoices.total}), 0)`,
+      })
+      .from(invoices)
+      .where(and(ne(invoices.status, "draft"), gte(invoices.date, monthStart), lt(invoices.date, monthEnd))),
   ]);
 
   const totalReceivable = receivables.reduce((s, r) => s + r.balance, 0);
@@ -25,7 +35,14 @@ export default async function ReportsPage() {
     <div className="flex flex-col gap-8">
       <h1 className="text-lg font-semibold text-zinc-900 dark:text-zinc-50">Reports</h1>
 
-      <div className="grid grid-cols-1 gap-6 sm:grid-cols-3">
+      <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-4">
+        <StatCard
+          label="Invoices (this month)"
+          value={`${invoiceSummary.count} · ${invoiceSummary.total.toFixed(2)}`}
+          icon={Receipt}
+          tone="neutral"
+          href="/dashboard/invoices"
+        />
         <StatCard label="Net profit (this month)" value={netProfit.netProfit.toFixed(2)} icon={TrendingUp} tone="accent" />
         <StatCard label="Total receivable" value={totalReceivable.toFixed(2)} icon={Wallet} tone="neutral" />
         <StatCard
@@ -37,6 +54,18 @@ export default async function ReportsPage() {
       </div>
 
       <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
+        <Link
+          href="/dashboard/invoices"
+          className="flex items-start gap-3 rounded-xl border border-zinc-200 bg-white p-4 shadow-sm transition-shadow hover:shadow-md dark:border-zinc-800 dark:bg-zinc-950"
+        >
+          <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg bg-accent-soft text-accent-soft-foreground">
+            <Receipt size={18} />
+          </span>
+          <span>
+            <h2 className="font-semibold text-zinc-900 dark:text-zinc-50">Invoices</h2>
+            <p className="text-sm text-zinc-500">Full invoice history, status, and drafts</p>
+          </span>
+        </Link>
         <Link
           href="/dashboard/reports/sales"
           className="flex items-start gap-3 rounded-xl border border-zinc-200 bg-white p-4 shadow-sm transition-shadow hover:shadow-md dark:border-zinc-800 dark:bg-zinc-950"

@@ -1,3 +1,5 @@
+import { SubmitButton } from "@/components/SubmitButton";
+
 type SupplierFormValues = {
   name?: string;
   phone?: string | null;
@@ -43,12 +45,12 @@ export function SupplierForm({
         />
       </label>
 
-      <button
-        type="submit"
-        className="mt-2 w-fit rounded-md bg-accent px-4 py-2 text-sm font-medium text-white dark:bg-accent dark:text-white"
+      <SubmitButton
+        pendingLabel="Saving..."
+        className="mt-2 w-fit rounded-md bg-accent px-4 py-2 text-sm font-medium text-white disabled:opacity-50 dark:bg-accent dark:text-white"
       >
         {submitLabel}
-      </button>
+      </SubmitButton>
     </form>
   );
 }

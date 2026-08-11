@@ -4,7 +4,7 @@ import { useState } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { MoreHorizontal, X, LogOut } from "lucide-react";
-import type { NavItem } from "@/lib/nav";
+import { flattenNav, getActiveHref, type NavItem } from "@/lib/nav";
 import { navIcons } from "@/lib/nav-icons";
 
 export function MobileBottomNav({
@@ -20,10 +20,16 @@ export function MobileBottomNav({
   const [moreOpen, setMoreOpen] = useState(false);
 
   const primary = nav.filter((item) => item.mobilePrimary).slice(0, 4);
-  const overflow = nav.filter((item) => !primary.includes(item));
+  const primaryHrefs = new Set(primary.map((item) => item.href));
+  // The bottom bar has no room for the sidebar's nested groups, so a
+  // parent's children ride alongside everything else in the flat "More"
+  // sheet instead of disappearing — e.g. Sales Returns still needs to be
+  // reachable even though it's nested under "Sale Invoice" on desktop.
+  const overflow = flattenNav(nav).filter((item) => !primaryHrefs.has(item.href));
+  const activeHref = getActiveHref(pathname, nav);
 
   function isActive(href: string) {
-    return href === "/dashboard" ? pathname === href : pathname.startsWith(href);
+    return href === activeHref;
   }
 
   return (

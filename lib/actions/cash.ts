@@ -1,8 +1,9 @@
 "use server";
 
 import { redirect } from "next/navigation";
+import { revalidatePath } from "next/cache";
 import { db } from "@/lib/db/client";
-import { payments, supplierPayments, cashTransactions, cashClosings } from "@/lib/db/schema";
+import { payments, supplierPayments, cashTransactions, cashClosings, type TenderMode } from "@/lib/db/schema";
 import { getCurrentUser } from "@/lib/auth/dal";
 import { logAudit } from "@/lib/audit";
 import { getCurrentCashBalance } from "@/lib/cash";
@@ -17,7 +18,7 @@ export async function recordPayment(formData: FormData) {
   const user = await requireAdmin();
   const customerId = Number(formData.get("customerId"));
   const amount = Number(formData.get("amount"));
-  const mode = String(formData.get("mode") ?? "cash") as "cash" | "credit" | "bank_transfer";
+  const mode = String(formData.get("mode") ?? "cash") as TenderMode;
 
   if (!customerId || amount <= 0) throw new Error("Select a customer and a positive amount");
 
@@ -31,6 +32,7 @@ export async function recordPayment(formData: FormData) {
     after: created,
   });
 
+  revalidatePath("/dashboard/cash");
   redirect("/dashboard/cash");
 }
 
@@ -38,7 +40,7 @@ export async function recordSupplierPayment(formData: FormData) {
   const user = await requireAdmin();
   const supplierId = Number(formData.get("supplierId"));
   const amount = Number(formData.get("amount"));
-  const mode = String(formData.get("mode") ?? "cash") as "cash" | "credit" | "bank_transfer";
+  const mode = String(formData.get("mode") ?? "cash") as TenderMode;
 
   if (!supplierId || amount <= 0) throw new Error("Select a supplier and a positive amount");
 
@@ -55,13 +57,14 @@ export async function recordSupplierPayment(formData: FormData) {
     after: created,
   });
 
+  revalidatePath("/dashboard/cash");
   redirect("/dashboard/cash");
 }
 
 export async function recordCashTransaction(formData: FormData) {
   const user = await requireAdmin();
   const direction = String(formData.get("direction") ?? "out") as "in" | "out";
-  const mode = String(formData.get("mode") ?? "cash") as "cash" | "bank_transfer";
+  const mode = String(formData.get("mode") ?? "cash") as TenderMode;
   const amount = Number(formData.get("amount"));
   const category = String(formData.get("category") ?? "").trim();
   const note = String(formData.get("note") ?? "").trim() || null;
@@ -81,6 +84,7 @@ export async function recordCashTransaction(formData: FormData) {
     after: created,
   });
 
+  revalidatePath("/dashboard/cash");
   redirect("/dashboard/cash");
 }
 
@@ -105,5 +109,6 @@ export async function createCashClosing(formData: FormData) {
     after: created,
   });
 
+  revalidatePath("/dashboard/cash/closing");
   redirect("/dashboard/cash/closing");
 }

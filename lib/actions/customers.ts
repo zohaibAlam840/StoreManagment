@@ -7,6 +7,7 @@ import { db } from "@/lib/db/client";
 import { customers, customerRates } from "@/lib/db/schema";
 import { getCurrentUser } from "@/lib/auth/dal";
 import { logAudit } from "@/lib/audit";
+import { parseCsv } from "@/lib/csv";
 
 async function requireAdmin() {
   const user = await getCurrentUser();
@@ -72,7 +73,60 @@ export async function createCustomer(formData: FormData) {
     after: created,
   });
 
+  revalidatePath("/dashboard/customers");
   redirect("/dashboard/customers");
+}
+
+export type ImportCustomersState = { error: string } | { success: true; count: number } | undefined;
+
+// Bulk customer import — matches the "name,phone,address,openingBalance,
+// creditLimit" columns the CSV export produces. Unlike product import (which
+// upserts by SKU), every row here is always inserted as a new customer:
+// customers have no reliable natural key, and two real customers can
+// legitimately share a name, so matching-by-name risks silently merging
+// distinct people's balances.
+export async function importCustomersCsv(
+  _state: ImportCustomersState,
+  formData: FormData
+): Promise<ImportCustomersState> {
+  const user = await requireAdmin();
+
+  const file = formData.get("file") as File | null;
+  if (!file || file.size === 0) return { error: "Choose a CSV file first." };
+
+  const rows = parseCsv(await file.text());
+  if (rows.length < 2) return { error: "That CSV has no data rows." };
+
+  const header = rows[0].map((h) => h.trim());
+  if (!header.includes("name")) return { error: 'CSV is missing required column "name"' };
+
+  let count = 0;
+  for (const row of rows.slice(1)) {
+    const record: Record<string, string> = {};
+    header.forEach((col, i) => (record[col] = row[i] ?? ""));
+
+    const name = record.name?.trim();
+    if (!name) continue;
+
+    await db.insert(customers).values({
+      name,
+      phone: record.phone?.trim() || null,
+      address: record.address?.trim() || null,
+      openingBalance: Number(record.openingBalance) || 0,
+      creditLimit: record.creditLimit ? Number(record.creditLimit) : null,
+    });
+    count++;
+  }
+
+  await logAudit({
+    actorId: user.id,
+    action: "customer.import_csv",
+    entity: "customers",
+    after: { count },
+  });
+
+  revalidatePath("/dashboard/customers");
+  return { success: true, count };
 }
 
 export async function updateCustomer(id: number, formData: FormData) {
@@ -96,6 +150,7 @@ export async function updateCustomer(id: number, formData: FormData) {
     after,
   });
 
+  revalidatePath("/dashboard/customers");
   redirect("/dashboard/customers");
 }
 
@@ -117,6 +172,7 @@ export async function setCustomerActive(id: number, active: boolean) {
     after,
   });
 
+  revalidatePath("/dashboard/customers");
   redirect("/dashboard/customers");
 }
 

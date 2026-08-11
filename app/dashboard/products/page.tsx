@@ -1,5 +1,4 @@
 import Link from "next/link";
-import Image from "next/image";
 import { redirect } from "next/navigation";
 import { db } from "@/lib/db/client";
 import { products } from "@/lib/db/schema";
@@ -59,12 +58,17 @@ export default async function ProductsPage() {
             <tr key={p.id} className="border-b border-zinc-100 dark:border-zinc-900">
               <td className="py-2">
                 {p.imageUrl ? (
-                  <Image
+                  // Plain <img>, not next/image: uploads can be any format
+                  // including SVG, which Next's image optimizer blocks by
+                  // default (a security default, not something to fight here
+                  // for 32px thumbnails).
+                  // eslint-disable-next-line @next/next/no-img-element
+                  <img
                     src={p.imageUrl}
                     alt={p.name}
                     width={32}
                     height={32}
-                    className="rounded object-cover"
+                    className="h-8 w-8 rounded object-cover"
                   />
                 ) : (
                   <div className="h-8 w-8 rounded bg-zinc-100 dark:bg-zinc-900" />

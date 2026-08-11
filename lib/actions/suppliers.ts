@@ -2,6 +2,7 @@
 
 import { eq } from "drizzle-orm";
 import { redirect } from "next/navigation";
+import { revalidatePath } from "next/cache";
 import { db } from "@/lib/db/client";
 import { suppliers } from "@/lib/db/schema";
 import { getCurrentUser } from "@/lib/auth/dal";
@@ -37,6 +38,7 @@ export async function createSupplier(formData: FormData) {
     after: created,
   });
 
+  revalidatePath("/dashboard/purchases/suppliers");
   redirect("/dashboard/purchases/suppliers");
 }
 
@@ -57,6 +59,7 @@ export async function updateSupplier(id: number, formData: FormData) {
     after,
   });
 
+  revalidatePath("/dashboard/purchases/suppliers");
   redirect("/dashboard/purchases/suppliers");
 }
 
@@ -78,5 +81,6 @@ export async function setSupplierActive(id: number, active: boolean) {
     after,
   });
 
+  revalidatePath("/dashboard/purchases/suppliers");
   redirect("/dashboard/purchases/suppliers");
 }

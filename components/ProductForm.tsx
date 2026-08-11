@@ -1,3 +1,5 @@
+import { SubmitButton } from "@/components/SubmitButton";
+
 type ProductFormValues = {
   sku?: string;
   name?: string;
@@ -58,6 +60,10 @@ export function ProductForm({
           <input name="unit" defaultValue={v.unit ?? "pcs"} className={inputClass} />
         </Field>
         <Field label="Product image">
+          {v.imageUrl && (
+            // eslint-disable-next-line @next/next/no-img-element
+            <img src={v.imageUrl} alt="" width={40} height={40} className="mb-1 h-10 w-10 rounded object-cover" />
+          )}
           <input name="image" type="file" accept="image/*" className={inputClass} />
         </Field>
       </div>
@@ -113,12 +119,12 @@ export function ProductForm({
         </Field>
       </div>
 
-      <button
-        type="submit"
-        className="mt-2 w-fit rounded-md bg-accent px-4 py-2 text-sm font-medium text-white dark:bg-accent dark:text-white"
+      <SubmitButton
+        pendingLabel="Saving..."
+        className="mt-2 w-fit rounded-md bg-accent px-4 py-2 text-sm font-medium text-white disabled:opacity-50 dark:bg-accent dark:text-white"
       >
         {submitLabel}
-      </button>
+      </SubmitButton>
     </form>
   );
 }
