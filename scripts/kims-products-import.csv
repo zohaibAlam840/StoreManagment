@@ -1,0 +1,201 @@
+sku,name,brand,category,packingUnit,company,unit,costPrice,minSellingPrice,minStock,maxStock,reorderLevel
+double-cream-biscuits-strawberry-vanilla,Double Cream Biscuits (Strawberry & Vanilla) Rs.50,,Roll Pack,1 X 48,Kims,CTN,1834,1834,0,,0
+choco-dip-cookies-rs-50,Choco Dip Cookies Rs.50,,Roll Pack,1 X 48,Kims,CTN,1834,1834,0,,0
+peanut-biscuit-rs-50,Peanut Biscuit Rs.50,,Roll Pack,1 X 48,Kims,CTN,1834,1834,0,,0
+tea-time-cookies-rs-40,Tea Time Cookies Rs.40,,Midi Pack,12 X 8,Kims,CTN,3120,3120,0,,0
+moong-phali-mp-rs-40,Moong Phali MP Rs.40,,Midi Pack,12 X 8,Kims,CTN,3120,3120,0,,0
+superb-milk-chocolate-rs-40,Superb (Milk & Chocolate) Rs.40,,Midi Pack,12 X 8,Kims,CTN,3120,3120,0,,0
+banana-crunch-m-p-rs-30,Banana Crunch M/P Rs.30,,Midi Pack,1 X 18 X 6,Kims,CTN,2602,2602,0,,0
+sopreme-egg-milk-cookies-rs-20,Sopreme Egg & Milk Cookies Rs.20,,Midi Pack,1 X 18 X 8,Kims,CTN,2296,2296,0,,0
+right-m-p-rs-20,Right M/P Rs.20,,Midi Pack,1 X 18 X 6,Kims,CTN,1666,1666,0,,0
+cookies-love-mp-rs-20,Cookies Love MP Rs.20,,Midi Pack,1 X 18 X 6,Kims,CTN,1666,1666,0,,0
+superb-mp-rs-10,Superb MP Rs.10,,Midi Pack,1 X 18 X 16,Kims,CTN,2296,2296,0,,0
+cheff-biscuits-rs-10-16-pieces,Cheff Biscuits Rs.10 (16 pieces),,Midi Pack,1 X 18 X 16,Kims,CTN,2296,2296,0,,0
+choco-twist-chocolate-filled-cookies-m-p,Choco Twist (Chocolate Filled Cookies) M/P Rs.10,,Midi Pack,1 X 18 X 16,Kims,CTN,2296,2296,0,,0
+glucose-magic-mp-rs-10,Glucose Magic MP Rs.10,,Midi Pack,1 X 18 X 16,Kims,CTN,2296,2296,0,,0
+choco-dip-cookies-mp-rs-10,Choco Dip Cookies MP Rs.10,,Midi Pack,1 X 18 X 16,Kims,CTN,2296,2296,0,,0
+narial-cookies-mp-rs-10,Narial Cookies MP Rs.10,,Midi Pack,1 X 18 X 16,Kims,CTN,2296,2296,0,,0
+superb-milk-chocolate-rs-10-16-pieces,Superb (Milk & Chocolate) Rs.10 (16 pieces),,Midi Pack,1 X 18 X 16,Kims,CTN,2296,2296,0,,0
+milky-way-mp-rs-10,Milky Way MP Rs.10,,Midi Pack,1 X 18 X 16,Kims,CTN,2296,2296,0,,0
+moong-phali-mp-rs-10,Moong Phali MP Rs.10,,Midi Pack,1 X 18 X 16,Kims,CTN,2296,2296,0,,0
+peanut-pista-mp-rs-10,Peanut Pista MP Rs.10,,Midi Pack,1 X 18 X 16,Kims,CTN,2296,2296,0,,0
+sweet-cookies-egg-milk-rs-10,Sweet Cookies (Egg & Milk) Rs.10,,Midi Pack,1 X 18 X 16,Kims,CTN,2296,2296,0,,0
+custard-cream-snack-pack-rs-5,Custard Cream Snack Pack Rs.5,,Snack Pack,1 X 18 X 30,Kims,CTN,2260,2260,0,,0
+milky-way-snack-pack-rs-5,Milky Way Snack Pack Rs.5,,Snack Pack,1 X 18 X 24,Kims,CTN,1738,1738,0,,0
+right-t-p-rs-5,Right T/P Rs.5,,Snack Pack,1 X 18 X 30,Kims,CTN,2260,2260,0,,0
+tea-time-t-p-rs-5,Tea Time T/P Rs.5,,Snack Pack,1 X 18 X 24,Kims,CTN,1792,1792,0,,0
+danish-butter-cookies-snack-pack-rs-5,Danish Butter Cookies Snack Pack Rs.5,,Snack Pack,1 X 18 X 24,Kims,CTN,1792,1792,0,,0
+badami-meva-candy-rs-5-30-pieces,Badami Meva Candy Rs.5 (30 pieces),,Candy Box,1 X 24 X 30,Kims,CTN,2890,2890,0,,0
+joy-lip-candy-chocolate-vanilla-rs-5,Joy Lip Candy (Chocolate & Vanilla) Rs.5,,Candy Box,1 X 18 X 30,Kims,CTN,1900,1900,0,,0
+butter-scotch-candy-rs-5-30-pieces,Butter Scotch Candy Rs.5 (30 pieces),,Candy Box,1 X 18 X 30,Kims,CTN,1900,1900,0,,0
+joy-lip-candy-chocolate-vanilla-jar-rs-5,Joy Lip Candy (Chocolate & Vanilla) Jar Rs.5,,Candy Box,1 X 12 X 50,Kims,CTN,2110,2110,0,,0
+kulfa-candy-rs-5-jar-50-pieces,Kulfa Candy Rs.5 Jar (50 pieces),,Candy Box,1 X 12 X 50,Kims,CTN,2110,2110,0,,0
+eclair-toffo-box-rs-1,Eclair Toffo Box Rs.1,,Toffee Box,1 X 18 X 150,Kims,CTN,2260,2260,0,,0
+masala-candy-jar-rs-2-150-pieces,Masala Candy Jar Rs.2 (150 pieces),,Candy Jar,1 X 6 X 150,Kims,CTN,1180,1180,0,,0
+butter-scotch-candy-box-rs-2,Butter Scotch Candy Box Rs.2,,Candy Box,1 X 24 X 75,Kims,CTN,2554,2554,0,,0
+meethi-rus-candy-box-rs-2,Meethi Rus Candy Box Rs.2,,Candy Box,1 X 24 X 75,Kims,CTN,2554,2554,0,,0
+fruito-candy-rs-2,Fruito Candy Rs.2,,Candy Box,1 X 18 X 75,Kims,CTN,1898,1898,0,,0
+clair-gold-toffee-rs-2,Éclair Gold Toffee Rs.2,,Toffee Box,1 X 36 X 60,Kims,CTN,3200,3200,0,,0
+amrood-box-rs-1,Amrood Box Rs.1,,Candy Box,1 X 24 X 150,Kims,CTN,3034,3034,0,,0
+fanto-box-rs-1,Fanto Box Rs.1,,Candy Box,1 X 24 X 150,Kims,CTN,3034,3034,0,,0
+khopra-box-rs-1,Khopra Box Rs.1,,Candy Box,1 X 24 X 150,Kims,CTN,3034,3034,0,,0
+double-shot-wafer-cream-rollies-rs-10,Double Shot (Wafer Cream Rollies) Rs.10,,Wafer Cream Rollies,1 X 18 X 15,Kims,CTN,2098,2098,0,,0
+piknik-banana-wafer-rs-5,Piknik Banana Wafer Rs.5,,Waffers,1 X 18 X 30,Kims,CTN,2170,2170,0,,0
+tik-tok-peach-wafers-box-rs-10-15-pieces,Tik Tok Peach Wafers Box Rs.10 (15 pieces),,Waffers,1 X 18 X 15,Kims,CTN,2170,2170,0,,0
+tik-tok-coconut-wafers-hanger-rs-10-15-p,Tik Tok Coconut Wafers Hanger Rs.10 (15 pieces),,Waffers,1 X 20 X 15,Kims,CTN,2410,2410,0,,0
+choco-bite-cone-rs-10,Choco Bite Cone Rs.10,,Waffers,1 X 18 X 24,Kims,CTN,3340,3340,0,,0
+krunchy-waffer-vanilla-rs-30,Krunchy Waffer (Vanilla) Rs.30,,Waffers,1 X 18 X 6,Kims,CTN,2436,2436,0,,0
+sip-condensed-milk-liquid-cream-box-rs-1,Sip Condensed Milk (Liquid Cream) Box Rs.10,,Liquid Chocolate,18 X 15,Kims,CTN,2188,2188,0,,0
+sip-condensed-milk-liquid-cream-jar-rs-1,Sip Condensed Milk (Liquid Cream) Jar Rs.10,,Liquid Chocolate,12 X 35,Kims,CTN,3526,3526,0,,0
+chokozo-milk-maza-rs-5,Chokozo Milk Maza Rs.5,,Liquid Chocolate,1X24X30,Kims,CTN,2770,2770,0,,0
+chokozo-milk-maza-jar-rs-5,Chokozo Milk Maza Jar Rs.5,,Liquid Chocolate,1 X 12 X 60,Kims,CTN,2870,2870,0,,0
+chatpata-rs-10-15-pieces,Chatpata Rs.10 (15 pieces),,Nimko,1 X 18 X 15,Kims,CTN,2134,2134,0,,0
+chatkhara-nimko-dal-murgh-rs-5-30-pieces,Chatkhara Nimko (Dal Murgh) Rs.5 (30 pieces),,Nimko,1 x 18 x 30,Kims,CTN,2134,2134,0,,0
+chatkhara-nimko-mix-nimko-rs-5-30-pieces,Chatkhara Nimko (Mix Nimko) Rs.5 (30 pieces),,Nimko,1 x 18 x 30,Kims,CTN,2134,2134,0,,0
+krazzy-coconut-rs-5-30-pieces,Krazzy Coconut Rs.5 (30 pieces),,Chocolates,1 X 18 X 30,Kims,CTN,2170,2170,0,,0
+nutty-rs-20-12-pieces,Nutty Rs.20 (12 pieces),,Chocolates,1 X 18 X 12,Kims,CTN,2890,2890,0,,0
+choco-milk-creamy-chocolate-rs-50,Choco Milk Creamy Chocolate Rs.50,,Moulded Chocolate,1 X 12 X 12,Kims,CTN,5330,5330,0,,0
+nut-khut-chocolate-rs-10,Nut Khut Chocolate Rs.10,,Moulded Chocolate,1 X 18 X 15,Kims,CTN,2250,2250,0,,0
+boomy-rs-5-30-pieces,Boomy Rs.5 (30 pieces),,Moulded Chocolate,1 X 18 X 30,Kims,CTN,2170,2170,0,,0
+choco-dream-rs-5-30-pieces,Choco Dream Rs.5 (30 pieces),,Moulded Chocolate,1 X 18 X 30,Kims,CTN,2170,2170,0,,0
+krazzy-nut-rs-5-30-pieces,Krazzy Nut Rs.5 (30 pieces),,Moulded Chocolate,1 X 18 X 30,Kims,CTN,2170,2170,0,,0
+choco-bisc-rs-10-24-pieces,Choco Bisc Rs.10 (24 pieces),,Chocolate Coated Wafer/Biscuit,1 X 18 X 24,Kims,CTN,3415,3415,0,,0
+krispo-wafers-chocolate-rs-20,Krispo Wafers Chocolate Rs.20,,Chocolate Coated Wafer,12x12,Kims,CTN,2340,2340,0,,0
+sweety-soft-cake-rs-5-30-pieces,Sweety Soft Cake Rs.5 (30 pieces),,Soft Cake,1 X 18 X 30,Kims,CTN,2224,2224,0,,0
+twinkle-cake-chocolate-vanilla-rs-5-30-p,Twinkle Cake (Chocolate & Vanilla) Rs.5 (30 pieces),,Soft Cake,1 X 18 X 30,Kims,CTN,2224,2224,0,,0
+shake-pineapple-cake-rs-5-30-pieces,Shake Pineapple Cake Rs.5 (30 pieces),,Soft Cake,1 X 18 X 30,Kims,CTN,2224,2224,0,,0
+strawberry-vanila-swiss-roll-cake-rs-10-,Strawberry Vanila (Swiss Roll) Cake Rs.10 (15 pieces),,Swiss Roll Cake,1 X 18 X 15,Kims,CTN,2260,2260,0,,0
+swiss-roll-banana-rs-10-15-pieces,Swiss Roll (Banana) Rs.10 (15 pieces),,Swiss Roll Cake,1 X 18 X 15,Kims,CTN,2260,2260,0,,0
+fix-strawberry-rs-10,Fix (Strawberry) Rs.10,,Chocolate Coated Cake,1 X 24 X15,Kims,CTN,2893,2893,0,,0
+muffinns-chocolate-rs-10,Muffinns (Chocolate) Rs.10,,Kup Cake,1 X 18 X 15,Kims,CTN,2224,2224,0,,0
+kup-cake-strawberry-rs-10,Kup Cake (Strawberry) Rs.10,,Kup Cake,1 X 18 X 15,Kims,CTN,2224,2224,0,,0
+donut-narial-rs-10,Donut Narial Rs.10,,Donuts,1 X 18 X 15,Kims,CTN,2296,2296,0,,0
+superb-soft-cake-egg-milk-rs-20-12-piece,Superb Soft Cake (Egg & Milk) Rs.20 (12 pieces),,Slice Cake,18 X 12,Kims,CTN,3429,3429,0,,0
+bubblo-double-twist-bubble-rs-5,Bubblo Double Twist Bubble Rs.5,,Bubble,1 X 18 X 30,Kims,CTN,1890,1890,0,,0
+bubblo-double-twist-bubble-jar-rs-5,Bubblo Double Twist Bubble (Jar) Rs.5,,Bubble,1 X 6 X 100,Kims,CTN,2100,2100,0,,0
+sabaz-elaichi-center-filled-gum-rs-2-5,Sabaz Elaichi Center Filled Gum Rs.2.5,,Bubble,36 X 36,Kims,CTN,2334,2334,0,,0
+bumper-bubble-amrood-rs-2,Bumper Bubble (Amrood) Rs.2,,Bubble,1 X 24 X 75,Kims,CTN,2890,2890,0,,0
+foxi-chocolate-beans-rs-5-40-pieces,Foxi (Chocolate Beans) Rs.5 (40 pieces),,Bunties,1 X 18 X 40,Kims,CTN,3034,3034,0,,0
+smart-phone-chocolate-beans-rs-5,Smart Phone (Chocolate Beans) Rs.5,,Bunties,1 X 18 X 40,Kims,CTN,3034,3034,0,,0
+magic-lolly-pop-rs-5,Magic Lolly Pop Rs.5,,Lolly Pop,1 X 18 X 30,Kims,CTN,2224,2224,0,,0
+sandwich-lolly-pop-strawberry-vanilla-rs,Sandwich Lolly Pop Strawberry Vanilla Rs.5,,Lolly Pop,1 X 12 X 50,Kims,CTN,2398,2398,0,,0
+panda-pop-chocolate-vanilla-lolly-pop-rs,Panda Pop (Chocolate & Vanilla) Lolly Pop Rs.5,,Lolly Pop,1 X 18 X 30,Kims,CTN,2224,2224,0,,0
+panda-pop-chocolate-vanilla-lolly-pop-ja,Panda Pop (Chocolate & Vanilla) Lolly Pop Jar Rs.5,,Lolly Pop,1 X 12 X 60,Kims,CTN,2890,2890,0,,0
+pink-ponk-strawberry-vanilla-cup-rs-5,Pink Ponk Strawberry & Vanilla Cup Rs.5,,Cream Cup,1 X 12 X 60,Kims,CTN,3130,3130,0,,0
+choco-boom-rs-5,Choco Boom Rs.5,,Cream Cup,1 X 12 X 60,Kims,CTN,2890,2890,0,,0
+milk-badami-milky-chew-rs-5,Milk Badami (Milky Chew) Rs.5,,Chew Toffee Bar,1 X 24 X 24,Kims,CTN,2074,2074,0,,0
+zoolo-strawberry-rs-5,Zoolo (Strawberry) Rs.5,,Chew Toffee Bar,1 X 24 X 24,Kims,CTN,2074,2074,0,,0
+yum-chew-chocolate-milk-rs-5,Yum Chew (Chocolate Milk) Rs.5,,Chew Toffee Bar,1 X 24 X 24,Kims,CTN,2074,2074,0,,0
+strawberry-jam-cake-rs-5-30-pieces,Strawberry Jam Cake Rs.5 (30 pieces),,Soft Cake,1 X 18 X 30,Kims,CTN,2224,2224,0,,0
+tutti-fruity-cake-rs-5-30-pieces,Tutti Fruity Cake Rs.5 (30 pieces),,Soft Cake,1 X 18 X 30,Kims,CTN,2224,2224,0,,0
+chocoluv-cake-rs-5-30-pieces,Chocoluv Cake Rs.5 (30 pieces),,Soft Cake,1 X 18 X 30,Kims,CTN,2224,2224,0,,0
+kims-cake-swiss-roll-chocolate-rs-10-15-,Kims Cake (Swiss Roll) Chocolate Rs.10 (15 pieces),,Swiss Roll Cake,1 X 18 X 15,Kims,CTN,2260,2260,0,,0
+swiss-roll-red-velvet-rs-10-15-pieces,Swiss Roll (Red Velvet) Rs.10 (15 pieces),,Swiss Roll Cake,1 X 18 X 15,Kims,CTN,2260,2260,0,,0
+fix-chocolate-rs-10,Fix (Chocolate) Rs.10,,Chocolate Coated Cake,1 X 24 X15,Kims,CTN,2893,2893,0,,0
+muffinns-strawberry-rs-10,Muffinns (Strawberry) Rs.10,,Kup Cake,1 X 18 X 15,Kims,CTN,2224,2224,0,,0
+kup-cake-chocolate-rs-10,Kup Cake (Chocolate) Rs.10,,Kup Cake,1 X 18 X 15,Kims,CTN,2224,2224,0,,0
+donut-choco-chip-rs-10,Donut Choco Chip Rs.10,,Donuts,1 X 18 X 15,Kims,CTN,2296,2296,0,,0
+donut-cake-chocolate-tray-pack-rs-20,Donut Cake Chocolate (Tray Pack) Rs.20,,Donut Cake,12 X 12,Kims,CTN,2226,2226,0,,0
+swiss-roll-rs-20-double-shot-strawberry-,Swiss Roll Rs.20 (Double Shot Strawberry & Vanila),,Swiss Roll Cake,1 X 18 X 6,Kims,CTN,1612,1612,0,,0
+fix-rs-20-chocolate-coated-strawberry-cr,Fix Rs.20 (Chocolate Coated Strawberry Cream Cake),,Chocolate Coated Cake,12 X 12,Kims,CTN,2160,2160,0,,0
+superb-soft-cake-chocolate-milk-rs-20-12,Superb Soft Cake (Chocolate & Milk) Rs.20 (12 pieces),,Slice Cake,18 X 12,Kims,CTN,3429,3429,0,,0
+cake-delight-strawberry-vanilla-cake-rs-,Cake Delight Strawberry & Vanilla Cake Rs.20,,Slice Cake,18 X 12,Kims,CTN,3429,3429,0,,0
+dr-bubble-box-rs-5,Dr. Bubble (Box) Rs.5,,Bubble,1 X 18 X 30,Kims,CTN,1990,1990,0,,0
+dr-bubble-jar-rs-5,Dr. Bubble (Jar) Rs.5,,Bubble,1 X 6 X 100,Kims,CTN,2209,2209,0,,0
+bumper-bubble-tuti-fruiti-rs-2,Bumper Bubble (Tuti Fruiti) Rs.2,,Bubble,1 X 24 X 75,Kims,CTN,2890,2890,0,,0
+let-s-go-bubble-gum-rs-5,Let's Go Bubble Gum Rs.5,,Bubble,1 X 12 X 50,Kims,CTN,2194,2194,0,,0
+be-mango-bubble-gum-rs-5,Be Mango Bubble Gum Rs.5,,Bubble,1 X 12 X 50,Kims,CTN,2194,2194,0,,0
+minty-bubble-gum-rs-5,Minty Bubble Gum Rs.5,,Bubble,1 X 12 X 50,Kims,CTN,2194,2194,0,,0
+beans-milk-chocolate-rs-20,Beans Milk Chocolate Rs.20,,Bunties,1 X 18 X 12,Kims,CTN,3240,3240,0,,0
+snacky-foxi-chocolate-beans-rs-5-40-piec,Snacky Foxi (Chocolate Beans) Rs.5 (40 pieces),,Bunties,1 X 18 X 40,Kims,CTN,3034,3034,0,,0
+blow-it-lolly-pop-rs-5,Blow It Lolly Pop Rs.5,,Lolly Pop,1 X 18 X 30,Kims,CTN,2224,2224,0,,0
+choco-ring-lolly-pop-chocolate-vanilla-r,Choco Ring Lolly Pop Chocolate Vanilla Rs.5,,Lolly Pop,1 X 12 X 50,Kims,CTN,2398,2398,0,,0
+panda-pop-orange-lime-lolly-pop-rs-5,Panda Pop (Orange & Lime) Lolly Pop Rs.5,,Lolly Pop,1 X 18 X 30,Kims,CTN,2224,2224,0,,0
+panda-milk-energy-lolly-pop-box-rs-5-30-,Panda (Milk Energy) Lolly Pop Box Rs.5 (30 pieces),,Lolly Pop,1 X 18 X 30,Kims,CTN,2224,2224,0,,0
+panda-pop-orange-lime-lolly-pop-jar-rs-5,Panda Pop (Orange & Lime) Lolly Pop Jar Rs.5,,Lolly Pop,1 X 12 X 60,Kims,CTN,2890,2890,0,,0
+panda-milk-energy-lolly-pop-jar-rs-5,Panda (Milk Energy) Lolly Pop Jar Rs.5,,Lolly Pop,1 X 12 X 60,Kims,CTN,2890,2890,0,,0
+pink-ponk-mango-cup-rs-5,Pink Ponk Mango Cup Rs.5,,Cream Cup,1 X 12 X 60,Kims,CTN,3130,3130,0,,0
+sour-dragon-cola-chew-rs-5,Sour Dragon Cola Chew Rs.5,,Chew Toffee Bar,1 X 24 X 24,Kims,CTN,2074,2074,0,,0
+tonik-blueberry-strawberry-rs-5,Tonik (Blueberry & Strawberry) Rs.5,,Chew Toffee Bar,1 X 24 X 24,Kims,CTN,2074,2074,0,,0
+tonik-lime-lemon-rs-5,Tonik (Lime & Lemon) Rs.5,,Chew Toffee Bar,1 X 24 X 24,Kims,CTN,2074,2074,0,,0
+buster-sour-chew-blueberry-rs-10-24-piec,Buster Sour Chew Blueberry Rs.10 (24 pieces),,Chew Toffee Bar,1 X 18 X 24,Kims,CTN,2890,2890,0,,0
+fanto-candy-jar-rs-2,Fanto Candy Jar Rs.2,,Candy Jar,12 X 150,Kims,CTN,2482,2482,0,,0
+butter-scotch-candy-pouch-rs-1-70-pieces,Butter Scotch Candy Pouch Rs.1 (70 pieces),,Candy Pouch,1 X 36 X 70,Kims,CTN,1910,1910,0,,0
+fruito-candy-rs-1,Fruito Candy Rs.1,,Candy Box,1 X 24 X 150,Kims,CTN,3034,3034,0,,0
+fanto-orange-candy-box-rs-1,Fanto Orange Candy Box Rs.1,,Candy Box,1 X 24 X 150,Kims,CTN,3034,3034,0,,0
+milky-soft-candy-box-rs-1,Milky Soft Candy Box Rs.1,,Candy Box,1 X 18 X 150,Kims,CTN,2170,2170,0,,0
+splasher-mango-candy-box-rs-1,Splasher (Mango) Candy Box Rs.1,,Candy Box,1 X 24 X 150,Kims,CTN,3034,3034,0,,0
+super-khopra-candy-box-rs-1,Super Khopra Candy Box Rs.1,,Candy Box,1 X 24 X 150,Kims,CTN,3034,3034,0,,0
+hokit-candy-box-rs-1,Hokit Candy Box Rs.1,,Candy Box,1 X 18 X 150,Kims,CTN,2170,2170,0,,0
+darbari-meva-mix-dry-fruits-rs-5,Darbari Meva (Mix Dry Fruits) Rs.5,,Dry Fruits,1 X 18 X 30,Kims,CTN,2026,2026,0,,0
+piknik-orange-wafer-rs-5,Piknik Orange Wafer Rs.5,,Waffers,1 X 18 X 30,Kims,CTN,2170,2170,0,,0
+tit-bit-strawberry-vanilla-rs-5-30-packs,Tit Bit Strawberry Vanilla Rs.5 (30-packs),,Waffers,1 X 18 X 30,Kims,CTN,2170,2170,0,,0
+tik-tok-orange-wafers-box-rs-10-15-piece,Tik Tok Orange Wafers Box Rs.10 (15 pieces),,Waffers,1 X 18 X 15,Kims,CTN,2170,2170,0,,0
+tik-tok-orange-wafers-hanger-rs-10-15-pi,Tik Tok Orange Wafers Hanger Rs.10 (15 pieces),,Waffers,1 X 20 X 15,Kims,CTN,2410,2410,0,,0
+tik-tok-strawberry-wafer-rs-20-12-pieces,Tik Tok Strawberry Wafer Rs.20 (12 pieces),,Waffers,1 X 18 X 12,Kims,CTN,3248,3248,0,,0
+krunchy-waffer-strawberry-rs-30,Krunchy Waffer (Strawberry) Rs.30,,Waffers,1 X 18 X 6,Kims,CTN,2436,2436,0,,0
+sip-strawberry-liquid-cream-box-rs-10,Sip Strawberry (Liquid Cream) Box Rs.10,,Liquid Chocolate,18 X 15,Kims,CTN,2188,2188,0,,0
+sip-strawberry-liquid-cream-jar-rs-10,Sip Strawberry (Liquid Cream) Jar Rs.10,,Liquid Chocolate,12 X 35,Kims,CTN,3526,3526,0,,0
+chokozo-strawberry-rs-5,Chokozo Strawberry Rs.5,,Liquid Chocolate,1X24X30,Kims,CTN,2770,2770,0,,0
+chokozo-strawberry-jar-rs-5,Chokozo Strawberry Jar Rs.5,,Liquid Chocolate,1 X 12 X 60,Kims,CTN,2870,2870,0,,0
+lazeez-daal-moth-rs-50,Lazeez Daal Moth Rs.50,,Nimko,1 X 12 X 6,Kims,CTN,2770,2770,0,,0
+shinwari-mix-nimko-rs-20-12-pieces,Shinwari Mix Nimko Rs.20 (12 pieces),,Nimko,1 X 12 X 12,Kims,CTN,2230,2230,0,,0
+chicken-spicy-mix-nimko-rs-10-15-pieces,Chicken Spicy Mix Nimko Rs.10 (15 pieces),,Nimko,1 X 18 X 15,Kims,CTN,2134,2134,0,,0
+achar-chaska-mix-nimko-rs-5-30-pieces,Achar Chaska (Mix Nimko) Rs.5 (30 pieces),,Nimko,1 x 18 x 30,Kims,CTN,2134,2134,0,,0
+chicken-masala-mix-nimko-rs-5-30-pieces,Chicken Masala Mix Nimko Rs.5 (30 pieces),,Nimko,1 x 18 x 30,Kims,CTN,2134,2134,0,,0
+fanatacy-rs-5-30-pieces,Fanatacy Rs.5 (30 pieces),,Chocolates,1 X 18 X 30,Kims,CTN,2170,2170,0,,0
+p-nut-rs-5-30-pieces,P-Nut Rs.5 (30 pieces),,Chocolates,1 X 18 X 30,Kims,CTN,2170,2170,0,,0
+p-nut-rs-10,P-Nut Rs.10,,Chocolates,1 X 18 X 15,Kims,CTN,1898,1898,0,,0
+fantacy-rs-10,Fantacy Rs.10,,Chocolates,1 X 18 X 15,Kims,CTN,1898,1898,0,,0
+choco-delight-creamy-chocolate-rs-10,Choco Delight Creamy Chocolate Rs.10,,Moulded Chocolate,1 X 12 X 24,Kims,CTN,2358,2358,0,,0
+secretechocolate-rs-5-30-pieces,Secretechocolate Rs.5 (30 pieces),,Moulded Chocolate,1 X 18 X 30,Kims,CTN,2170,2170,0,,0
+jammy-chocolate-rs-5-30-pieces,Jammy Chocolate Rs.5 (30 pieces),,Moulded Chocolate,1 X 18 X 30,Kims,CTN,2170,2170,0,,0
+jammy-strawberry-jam-rs-5,Jammy Strawberry Jam Rs.5,,Moulded Chocolate,1 X 18 X 30,Kims,CTN,2170,2170,0,,0
+doodle-chocolate-rs-5,Doodle Chocolate Rs.5,,Moulded Chocolate,1 X 18 X 30,Kims,CTN,2170,2170,0,,0
+milky-chocolate-rs-5,Milky Chocolate Rs.5,,Moulded Chocolate,1 X 18 X 30,Kims,CTN,2170,2170,0,,0
+hello-chocolate-coated-biscuit-rs-5,Hello Chocolate Coated Biscuit Rs.5,,Chocolate Coated Biscuit,18X30,Kims,CTN,2250,2250,0,,0
+spark-rs-10-24-pieces,Spark Rs.10 (24 pieces),,Chocolate Coated Wafer/Biscuit,1 X 18 X 24,Kims,CTN,3600,3600,0,,0
+twinkle-cake-strawberry-vanila-rs-5-30-p,Twinkle Cake (Strawberry & Vanila) Rs.5 (30 pieces),,Soft Cake,1 X 18 X 30,Kims,CTN,2224,2224,0,,0
+glory-biscuits-egg-milk-rs-50,Glory Biscuits Egg & Milk Rs.50,,Roll Pack,1 X 48,Kims,CTN,1834,1834,0,,0
+superb-cookies-elachi-rs-50,Superb Cookies (Elachi) Rs.50,,Roll Pack,1 X 48,Kims,CTN,1834,1834,0,,0
+tea-time-cookies-rs-50,Tea Time Cookies Rs.50,,Roll Pack,1 X 48,Kims,CTN,1834,1834,0,,0
+danish-butter-cookies-mp-rs-50,Danish Butter Cookies MP Rs.50,,Roll Pack,1 X 48,Kims,CTN,1834,1834,0,,0
+superb-biscuit-rs-50,Superb Biscuit Rs.50,,Roll Pack,1 X 48,Kims,CTN,1834,1834,0,,0
+sopreme-fp-rs-50,Sopreme FP Rs.50,,Family Pack,1 x 96,Kims,CTN,3850,3850,0,,0
+superb-cookies-elachi-rs-40,Superb Cookies (Elachi) Rs.40,,Midi Pack,12 X 8,Kims,CTN,3120,3120,0,,0
+lemon-crunch-mp-rs-40,Lemon Crunch MP Rs.40,,Midi Pack,12 X 8,Kims,CTN,3120,3120,0,,0
+chocolate-crunch-m-p-rs-30,Chocolate Crunch M/P Rs.30,,Midi Pack,1 X 18 X 6,Kims,CTN,2602,2602,0,,0
+biskut-egg-milk-cookies-rs-20,Biskut (Egg & Milk Cookies) Rs.20,,Midi Pack,1 X 18 X 10,Kims,CTN,2782,2782,0,,0
+glucose-magic-mp-rs-20,Glucose Magic MP Rs.20,,Midi Pack,1 X 18 X 8,Kims,CTN,2296,2296,0,,0
+superb-milk-chocolate-rs-20-8-pieces,Superb (Milk & Chocolate) Rs.20 (8 pieces),,Midi Pack,1 X 18 X 8,Kims,CTN,2296,2296,0,,0
+enjoy-peanut-rs-20,Enjoy Peanut Rs.20,,Midi Pack,1 X 18 X 6,Kims,CTN,1666,1666,0,,0
+chocolate-sandwich-mp-rs-10,Chocolate Sandwich MP Rs.10,,Midi Pack,1 X 18 X 16,Kims,CTN,2296,2296,0,,0
+custard-cream-mp-rs-10,Custard Cream MP Rs.10,,Midi Pack,1 X 18 X 16,Kims,CTN,2296,2296,0,,0
+strawberry-fun-mp-rs-10,Strawberry Fun MP Rs.10,,Midi Pack,1 X 18 X 16,Kims,CTN,2296,2296,0,,0
+lemon-sandwich-mp-rs-10,Lemon Sandwich MP Rs.10,,Midi Pack,1 X 18 X 16,Kims,CTN,2296,2296,0,,0
+butter-cookies-mp-rs-10,Butter Cookies MP Rs.10,,Midi Pack,1 X 18 X 16,Kims,CTN,2296,2296,0,,0
+coconut-cookies-mp-rs-10,Coconut Cookies MP Rs.10,,Midi Pack,1 X 18 X 16,Kims,CTN,2296,2296,0,,0
+tea-time-mp-rs-10,Tea Time MP Rs.10,,Midi Pack,1 X 18 X 16,Kims,CTN,2296,2296,0,,0
+biskut-egg-milk-cookies-rs-10,Biskut (Egg & Milk Cookies) Rs.10,,Midi Pack,1 X 18 X 16,Kims,CTN,2296,2296,0,,0
+chocolate-sandwich-snack-pack-rs-5,Chocolate Sandwich Snack Pack Rs.5,,Snack Pack,1 X 18 X 30,Kims,CTN,2260,2260,0,,0
+strawberry-fun-snack-pack-rs-5,Strawberry Fun Snack Pack Rs.5,,Snack Pack,1 X 18 X 30,Kims,CTN,2260,2260,0,,0
+coco-nut-cookies-rs-5,Coco-Nut Cookies Rs.5,,Snack Pack,1 X 18 X 24,Kims,CTN,1738,1738,0,,0
+duo-chocolate-vanilla-sandwich-rs-5,Duo Chocolate Vanilla Sandwich Rs.5,,Snack Pack,1 X 18 X 30,Kims,CTN,2260,2260,0,,0
+yumtum-strawberry-vanilla-rs-5,Yumtum (Strawberry & Vanilla) Rs.5,,Snack Pack,1 X 18 X 30,Kims,CTN,2260,2260,0,,0
+smilish-snack-pack-rs-5,Smilish Snack Pack Rs.5,,Snack Pack,1 X 18 X 30,Kims,CTN,2260,2260,0,,0
+biskut-egg-milk-cookies-rs-5,Biskut (Egg & Milk Cookies) Rs.5,,Snack Pack,1 X 18 X 30,Kims,CTN,2260,2260,0,,0
+hi-panda-chocolate-filled-biscuits-rs-10,Hi Panda (Chocolate Filled Biscuits) Rs.10,,Chocolate Filled Biscuits,1 X 18 X 16,Kims,CTN,2224,2224,0,,0
+fun-fruit-jelly-jar-rs-10,Fun Fruit Jelly Jar Rs.10,,Liquid Jelly,1 X 12 X 30,Kims,CTN,2890,2890,0,,0
+khopra-maza-candy-rs-5-30-pieces,Khopra Maza Candy Rs.5 (30 pieces),,Candy Box,1 X 18 X 30,Kims,CTN,1900,1900,0,,0
+fanto-maza-candy-rs-5-30-pieces,Fanto Maza Candy Rs.5 (30 pieces),,Candy Box,1 X 18 X 30,Kims,CTN,1900,1900,0,,0
+joy-lip-candy-amrood-rs-5,Joy Lip Candy (Amrood) Rs.5,,Candy Box,1 X 18 X 30,Kims,CTN,1900,1900,0,,0
+coffee-blend-candy-rs-5-30-pieces,Coffee Blend Candy Rs.5 (30 pieces),,Candy Box,1 X 18 X 30,Kims,CTN,1900,1900,0,,0
+joy-lip-candy-amrood-jar-rs-5,Joy Lip Candy (Amrood) Jar Rs.5,,Candy Box,1 X 12 X 50,Kims,CTN,2110,2110,0,,0
+butter-scotch-candy-rs-5-jar-50-pieces,Butter Scotch Candy Rs.5 Jar (50 pieces),,Candy Box,1 X 12 X 50,Kims,CTN,2110,2110,0,,0
+sona-halwa-toffee-rs-2,Sona Halwa Toffee Rs.2,,Toffee Box,1 X 24 X 75,Kims,CTN,2770,2770,0,,0
+milk-toffo-box-rs-1,Milk Toffo Box Rs.1,,Toffee Box,1 X 18 X 150,Kims,CTN,2260,2260,0,,0
+prime-toffo-chocolate-box-rs-1,Prime Toffo Chocolate Box Rs.1,,Toffee Box,1 X 18 X 150,Kims,CTN,2260,2260,0,,0
+mil-cane-milk-cream-candy-box-rs-2,Mil-Cane Milk Cream Candy Box Rs.2,,Candy Box,1 X 24 X 75,Kims,CTN,2554,2554,0,,0
+mango-maza-candy-box-rs-2,Mango Maza Candy Box Rs.2,,Candy Box,1 X 24 X 75,Kims,CTN,2554,2554,0,,0
+pinky-strawberry-cream-candy-box-rs-2,Pinky Strawberry Cream Candy Box Rs.2,,Candy Box,1 X 24 X 75,Kims,CTN,2554,2554,0,,0
+amrood-maza-candy-rs-2,Amrood Maza Candy Rs.2,,Candy Box,1 X 24 X 75,Kims,CTN,2554,2554,0,,0
